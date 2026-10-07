@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sheri's Place · Family Restaurant · Springfield, VT</title>
+<meta name="description" content="Sheri's Place — a cozy family restaurant on Main Street in Springfield, Vermont since 2010. American bar food and Tex-Mex favorites. Call (802) 885-4240.">
+<meta name="theme-color" content="#7a1c14">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png">
+<link rel="apple-touch-icon" href="images/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Helps Google show the right info in search & Maps -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Sheri's Place",
+  "image": "images/sheri-sign.jpg",
+  "telephone": "+1-802-885-4240",
+  "servesCuisine": ["American", "Tex-Mex"],
+  "foundingDate": "2010",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "30 Main St",
+    "addressLocality": "Springfield",
+    "addressRegion": "VT",
+    "postalCode": "05156",
+    "addressCountry": "US"
+  },
+  "sameAs": ["https://www.facebook.com/sherisrestaurant"]
+}
+</script>
+
+<style>
+  :root {
+    --cream: #fbf4e8;
+    --paper: #fffaf1;
+    --brick: #7a1c14;
+    --brick-dark: #4a0f0a;
+    --red: #c8261b;
+    --gold: #f4b324;
+    --gold-soft: #ffe7a8;
+    --ink: #2b1a14;
+    --muted: #6f5a4e;
+    --line: #ead9bf;
+    --green: #2f7d3a;
+    --radius: 18px;
+    --shadow: 0 6px 20px rgba(74, 15, 10, .12);
+    --bar-h: 72px;
+    --gutter: 16px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font: 400 17px/1.55 "Nunito", system-ui, -apple-system, sans-serif;
+    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: var(--brick); }
+  h1, h2, h3 { font-family: "Fraunces", Georgia, serif; line-height: 1.15; margin: 0; }
+  h2 { font-size: 1.9rem; color: var(--brick); }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 var(--gutter); }
+  section { padding: 44px 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 8px; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(251, 244, 232, .94);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  .topbar img { height: 40px; width: auto; }
+  .topnav { display: none; gap: 22px; font-weight: 700; }
+  .topnav a { text-decoration: none; color: var(--ink); }
+  .topnav a:hover { color: var(--red); }
+  .call-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--brick); color: #fff; text-decoration: none;
+    font-weight: 800; padding: 9px 16px; border-radius: 999px; font-size: .95rem;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; overflow: hidden; color: #fff; text-align: center;
+    padding: 38px 0 40px;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(244,179,36,.28), transparent 60%),
+      linear-gradient(180deg, #6e1b11 0%, #5a140d 45%, #360a06 100%);
+  }
+  /* the storefront on Main St, faded into the background */
+  .hero::before {
+    content: ""; position: absolute; inset: 0; opacity: .12; pointer-events: none;
+    background: url("images/storefront.webp") 30% center / cover no-repeat;
+  }
+  .hero > .wrap { position: relative; }
+  .logo-wrap { position: relative; width: min(92%, 440px); margin: 0 auto; }
+  .hero-logo { width: 100%; filter: drop-shadow(0 8px 18px rgba(0,0,0,.35)); }
+
+  /* Logo "writes" itself in left to right, then a gold shine sweeps across */
+  .hero-logo {
+    -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+            mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+    -webkit-mask-size: 250% 100%; mask-size: 250% 100%;
+    -webkit-mask-position: 0 0; mask-position: 0 0;
+    animation: write-in 1.6s cubic-bezier(.45,.05,.35,1) .15s both;
+  }
+  @keyframes write-in {
+    from { -webkit-mask-position: 100% 0; mask-position: 100% 0; transform: translateY(6px); }
+    to   { -webkit-mask-position: 0 0;    mask-position: 0 0;    transform: none; }
+  }
+  .logo-wrap::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.75) 50%, transparent 65%) -150% 0 / 200% 100% no-repeat;
+    -webkit-mask: url("images/logo.webp") center / contain no-repeat;
+            mask: url("images/logo.webp") center / contain no-repeat;
+    mix-blend-mode: soft-light;
+    animation: shine 1.1s ease-out 1.6s both;
+  }
+  @keyframes shine { from { background-position: -150% 0; } to { background-position: 250% 0; } }
+
+  /* everything under the logo eases in once it's written */
+  .hero .rise { animation: rise .6s ease-out both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+  .hero .r1 { animation-delay: 1.2s; } .hero .r2 { animation-delay: 1.35s; }
+  .hero .r3 { animation-delay: 1.5s; } .hero .r4 { animation-delay: 1.65s; } .hero .r5 { animation-delay: 1.8s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-logo, .logo-wrap::after, .hero .rise { animation: none; }
+  }
+  .tagline { font-family: "Fraunces", serif; font-size: 1.35rem; margin: 10px 0 2px; color: var(--gold-soft); }
+  .since { margin: 0; opacity: .92; font-weight: 600; }
+  .status {
+    display: inline-flex; align-items: center; gap: 8px; margin: 18px 0 20px; min-height: 44px;
+    background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.25); color: #fff; cursor: pointer;
+    padding: 8px 16px; border-radius: 999px; font: 700 .98rem "Nunito", sans-serif;
+  }
+  .status svg { width: 18px; height: 18px; flex: none; }
+  .status .chev { width: 14px; height: 14px; opacity: .8; }
+
+  .actions { display: grid; gap: 12px; max-width: 420px; margin: 0 auto; }
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 56px; padding: 0 20px; border-radius: 14px;
+    font: 800 1.08rem "Nunito", sans-serif; text-decoration: none; cursor: pointer; border: 0;
+    transition: transform .1s ease;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn svg { width: 22px; height: 22px; flex: none; }
+  .btn-gold { background: var(--gold); color: var(--brick-dark); box-shadow: 0 4px 0 #c98a0a; }
+  .btn-light { background: #fff; color: var(--brick); }
+  .btn-ghost { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.55); }
+  .btn-brick { background: var(--brick); color: #fff; }
+  .btn-outline { background: var(--paper); color: var(--brick); border: 2px solid var(--line); }
+
+  .rating-chip {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 22px;
+    color: #fff; text-decoration: none; font-weight: 700; font-size: .95rem;
+  }
+  /* Star rating: gold fill is clipped to the exact rating (4.5 of 5 = 90%) */
+  .stars { position: relative; display: inline-block; letter-spacing: 1px; line-height: 1; color: rgba(255,255,255,.3); }
+  .stars::before { content: "★★★★★"; }
+  .stars::after {
+    content: "★★★★★"; position: absolute; left: 0; top: 0; overflow: hidden; white-space: nowrap;
+    width: calc(var(--rating) / 5 * 100%); color: var(--gold);
+  }
+  .rcard .stars { color: var(--line); }
+
+  /* ---------- Menu ---------- */
+  .menu-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .menu-note { color: var(--muted); font-size: .92rem; margin: 6px 0 0; }
+  .chips {
+    display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+    padding: 4px var(--gutter); margin: 16px calc(-1 * var(--gutter)) 0;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; padding: 9px 16px; border-radius: 999px; font: 800 .95rem "Nunito", sans-serif;
+    background: var(--paper); border: 2px solid var(--line); color: var(--ink); cursor: pointer;
+  }
+  .chip.active { background: var(--brick); border-color: var(--brick); color: #fff; }
+  .chip-special { border-color: var(--gold); }
+  .chip-special.active { background: var(--gold); border-color: var(--gold); color: var(--brick-dark); }
+  /* Specials panel gets a warm chalkboard-style card */
+  .menu-cat .special-card {
+    background: var(--paper); border: 2px solid var(--gold); border-radius: var(--radius);
+    padding: 22px 22px 10px; box-shadow: var(--shadow);
+  }
+  .menu-cat.special h3 { border-bottom-color: var(--gold-soft); }
+  /* Carousel: one section at a time, swipe or tap a tab to move between them */
+  .menu-track {
+    display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
+    margin: 0 calc(-1 * var(--gutter)); transition: height .3s ease;
+  }
+  .menu-track::-webkit-scrollbar { display: none; }
+  .menu-cat { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; padding: 18px var(--gutter) 4px; }
+  .menu-pager { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin-top: 14px; }
+  #nextBtn { justify-self: end; }
+  .pager-btn {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
+    border-radius: 12px; border: 2px solid var(--line); background: var(--paper); color: var(--brick);
+    font: 800 .92rem/1.2 "Nunito", sans-serif; cursor: pointer; text-align: left; justify-self: start;
+  }
+  .pager-btn[hidden] { display: inline-flex; visibility: hidden; }
+  .dots { display: flex; justify-content: center; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); transition: all .2s; }
+  .dots i.on { background: var(--brick); width: 20px; border-radius: 4px; }
+  .menu-cat h3 {
+    font-size: 1.45rem; color: var(--brick-dark); display: flex; align-items: center; gap: 10px;
+    padding-bottom: 8px; border-bottom: 2px dashed var(--line);
+  }
+  .cat-inner > p { color: var(--muted); margin: 10px 0 6px; font-size: .95rem; }
+  .item { display: grid; grid-template-columns: 1fr; gap: 2px 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .item:last-child { border-bottom: 0; }
+  .item h4 { margin: 0; font-size: 1.08rem; font-weight: 800; }
+  .item p { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: .95rem; }
+  .tag { display: inline-block; font-size: .7rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; margin-left: 6px; vertical-align: 2px; background: #ffe2dc; color: var(--red); }
+  .tag.fav { background: var(--gold-soft); color: #7a4a00; }
+
+  /* ---------- About ---------- */
+  .about { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .about-photo { border-radius: var(--radius); box-shadow: var(--shadow); margin: 18px 0; aspect-ratio: 1; object-fit: cover; width: 100%; }
+  .badge-2010 {
+    display: inline-block; background: var(--brick); color: var(--gold-soft);
+    font-family: "Fraunces", serif; font-weight: 800; padding: 6px 14px; border-radius: 10px; margin-top: 10px;
+  }
+  .perks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .perk { background: var(--cream); border: 1px solid var(--line); border-radius: 14px; padding: 14px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .perk .pi { width: 26px; height: 26px; flex: none; fill: none; stroke: var(--red); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Reviews ---------- */
+  .review-cards { display: grid; gap: 14px; margin-top: 18px; }
+  .rcard {
+    display: flex; align-items: center; gap: 16px; padding: 18px;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    text-decoration: none; color: var(--ink); box-shadow: var(--shadow);
+  }
+  .rcard .logo { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+  .rcard .big { font-family: "Fraunces", serif; font-size: 1.6rem; font-weight: 800; }
+  .rcard small { color: var(--muted); font-weight: 600; display: block; }
+  .rcard .go { margin-left: auto; color: var(--red); font-weight: 800; white-space: nowrap; }
+
+  /* ---------- Find us ---------- */
+  .map { width: 100%; height: 260px; border: 0; border-radius: var(--radius); margin: 18px 0 14px; box-shadow: var(--shadow); background: #eadfcd; }
+  .addr { font-size: 1.15rem; font-weight: 700; margin: 0 0 14px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hours { width: 100%; border-collapse: collapse; margin-top: 22px; background: var(--paper); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+  .hours td { padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .hours tr:last-child td { border-bottom: 0; }
+  .hours td:last-child { text-align: right; font-weight: 700; }
+  .hours tr.today { background: #fdebd0; }
+  .hours tr.today td:first-child { font-weight: 800; color: var(--brick); }
+
+  /* ---------- Footer ---------- */
+  footer { background: var(--brick-dark); color: #f3e4d4; text-align: center; padding: 36px 0 30px; }
+  footer img { width: 200px; margin: 0 auto 10px; }
+  footer a { color: var(--gold-soft); font-weight: 700; }
+  footer p { margin: 6px 0; }
+  .footer-join { background: none; border: 0; color: var(--gold-soft); font: 700 1rem "Nunito", sans-serif; text-decoration: underline; cursor: pointer; padding: 8px; }
+  .fb-btn { display: inline-flex; align-items: center; gap: 8px; margin: 14px 0 8px; background: #1877f2; color: #fff !important; text-decoration: none; padding: 12px 20px; border-radius: 12px; }
+
+  /* ---------- Hours pop-up (slides up from the bottom) ---------- */
+  .sheet {
+    position: fixed; inset: auto 0 0 0; margin: 0 auto; width: 100%; max-width: 480px; max-height: 85vh;
+    border: 0; padding: 0;
+    border-radius: 22px 22px 0 0; background: var(--paper); color: var(--ink);
+    box-shadow: 0 -10px 40px rgba(0,0,0,.25);
+  }
+  .sheet[open] { animation: sheet-up .32s cubic-bezier(.2,.8,.2,1); }
+  .sheet.closing { animation: sheet-down .22s ease-in forwards; }
+  .sheet::backdrop { background: rgba(43,26,20,.5); animation: fade-in .32s ease; }
+  .sheet.closing::backdrop { animation: fade-out .22s ease forwards; }
+  @keyframes sheet-up { from { transform: translateY(100%); } }
+  @keyframes sheet-down { to { transform: translateY(100%); } }
+  @keyframes fade-in { from { opacity: 0; } }
+  @keyframes fade-out { to { opacity: 0; } }
+  .sheet-body { padding: 10px 20px calc(24px + env(safe-area-inset-bottom)); }
+  .sheet .grab { width: 44px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 14px; }
+  .sheet-head { display: flex; align-items: center; justify-content: space-between; }
+  .sheet-head h2 { font-size: 1.6rem; }
+  .sheet-close {
+    width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--cream); color: var(--brick);
+    font: 800 1.4rem/1 "Nunito", sans-serif; cursor: pointer;
+  }
+  .sheet .hours { margin-top: 14px; }
+
+  /* Desktop: pop-ups sit in the middle of the screen and fade in instead of sliding up */
+  @media (min-width: 760px) {
+    .sheet {
+      inset: 0; margin: auto; height: fit-content; max-width: 520px; border-radius: 22px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.3);
+    }
+    .sheet[open] { animation: pop-in .25s ease-out; }
+    .sheet.closing { animation: pop-out .18s ease-in forwards; }
+    .sheet .grab { display: none; }
+    .loop { padding: 18px 20px; gap: 20px; flex-wrap: nowrap; }
+    .loop .btn { flex: none; }
+    .sheet-body { padding: 24px 28px 28px; }
+    @keyframes pop-in { from { opacity: 0; transform: scale(.96); } }
+    @keyframes pop-out { to { opacity: 0; transform: scale(.96); } }
+  }
+
+  /* ---------- Upcoming events: banner under the hero + pop-up list ---------- */
+  .events-bar {
+    display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; cursor: pointer;
+    max-width: 420px; margin: 20px auto 0; padding: 14px 16px; border-radius: var(--radius);
+    background: var(--paper); border: 2px solid var(--gold); box-shadow: var(--shadow);
+    font: inherit; color: var(--ink);
+  }
+  .events-bar[hidden] { display: none; }
+  .events-bar .ev-text { flex: 1; min-width: 0; }
+  .events-bar small { display: block; font-weight: 600; font-size: .85rem; color: var(--muted); }
+  .events-bar strong { display: block; font-size: 1.02rem; line-height: 1.3; }
+  .events-bar .go { color: var(--red); font-weight: 800; font-size: .9rem; white-space: nowrap; }
+  .date-tile {
+    flex: none; width: 56px; border-radius: 12px; overflow: hidden; text-align: center;
+    background: #fff; border: 1px solid var(--line); line-height: 1.1;
+  }
+  .date-tile .mo { display: block; background: var(--brick); color: #fff; font-weight: 800; font-size: .7rem; letter-spacing: .08em; padding: 3px 0; }
+  .date-tile .dy { display: block; font-family: "Fraunces", serif; font-weight: 800; font-size: 1.45rem; color: var(--brick-dark); padding-top: 3px; }
+  .date-tile .wd { display: block; font-size: .68rem; font-weight: 800; color: var(--muted); padding-bottom: 4px; }
+  .event { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .event:last-child { border-bottom: 0; }
+  .event h3 { font-size: 1.15rem; color: var(--brick-dark); margin-bottom: 4px; }
+  .event p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .event p strong { color: var(--ink); }
+  .events-list { margin-top: 6px; overflow-y: auto; max-height: 52vh; }
+  .event > div { flex: 1; min-width: 0; }
+  .rsvp-btn {
+    flex: none; align-self: center; min-height: 40px; padding: 0 16px; border-radius: 999px; cursor: pointer;
+    background: var(--brick); color: #fff; border: 0; font: 800 .9rem "Nunito", sans-serif;
+  }
+  .loop {
+    margin-top: 14px; padding: 16px; border-radius: 16px; background: var(--cream); border: 1px solid var(--line);
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .loop div { flex: 1 1 180px; }
+  .loop h3 { font-size: 1.1rem; color: var(--brick-dark); }
+  .loop p { margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
+  .loop .btn { min-height: 46px; font-size: .98rem; flex: 1 1 160px; white-space: nowrap; padding: 0 22px; }
+
+  /* Sign-up form (RSVP + email list) */
+  .form-sub { margin: 4px 0 16px; color: var(--muted); }
+  .field { display: block; margin-bottom: 14px; }
+  .field span { display: block; font-weight: 800; font-size: .92rem; margin-bottom: 6px; }
+  .field input {
+    width: 100%; min-height: 52px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--line);
+    background: #fff; color: var(--ink); font: 400 1.05rem "Nunito", sans-serif;
+  }
+  .field input:focus { outline: none; border-color: var(--gold); }
+  .hp { position: absolute; left: -9999px; }
+  .form-note { color: var(--muted); font-size: .82rem; margin: 10px 0 0; text-align: center; }
+  .form-error { color: var(--red); font-weight: 700; margin: 10px 0 0; text-align: center; }
+  #signupForm .btn { width: 100%; }
+  .done { text-align: center; padding: 10px 0 4px; }
+  .done .check {
+    width: 64px; height: 64px; margin: 0 auto 12px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--gold-soft); color: var(--brick);
+  }
+  .done h3 { font-size: 1.4rem; color: var(--brick-dark); }
+  .done p { color: var(--muted); margin: 6px 0 18px; }
+
+  /* ---------- Sticky bottom action bar (phones) ---------- */
+  .actionbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    background: var(--paper); border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 20px rgba(74,15,10,.12);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .actionbar a {
+    height: var(--bar-h); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    text-decoration: none; color: var(--brick); font-weight: 800; font-size: .85rem;
+  }
+  .actionbar a svg { width: 26px; height: 26px; }
+  .actionbar a.primary { background: var(--brick); color: #fff; }
+
+  /* ---------- Bigger screens ---------- */
+  @media (min-width: 760px) {
+    :root { --gutter: 32px; }
+    body { padding-bottom: 0; }
+    section { padding: 64px 0; }
+    .actionbar { display: none; }
+    .topnav { display: flex; }
+    .actions { grid-template-columns: repeat(3, 1fr); max-width: 640px; }
+    .events-bar { max-width: 640px; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .review-cards { grid-template-columns: 1fr 1fr; }
+    .map { height: 340px; }
+    /* two newspaper-style columns: each stacks on its own, so spacing stays even */
+    .items { columns: 2; column-gap: 64px; margin-top: 8px; }
+    .items .item { border-bottom: 0; padding: 10px 0; break-inside: avoid; }
+    .menu-cat .special-card { padding: 30px 36px 24px; }
+  }
+
+  /* Desktop: hero lines up on the left so the storefront shows on the right */
+  @media (min-width: 1000px) {
+    :root { --gutter: 48px; }
+    h2 { font-size: 2.3rem; }
+    .topbar .wrap { height: 66px; }
+    .topbar img { height: 46px; }
+    .hero { text-align: left; padding: 72px 0 80px; }
+    .hero::before { background-position: 75% 40%; }
+    .hero > .wrap > * { max-width: 600px; }
+    .logo-wrap { width: 520px; margin: 0; }
+    .tagline { font-size: 1.6rem; }
+    .since { font-size: 1.1rem; }
+    .actions { margin: 0; }
+    .review-cards { grid-template-columns: repeat(3, 1fr); }
+    .visit-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; margin-top: 18px; }
+    .visit-grid .map { height: 100%; min-height: 460px; margin: 0; }
+    .visit-grid .hours { margin-top: 12px; }
+    .events-bar { max-width: 600px; margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<!-- Reusable icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path fill="currentColor" d="M8.1 13.3 10.9 10.5 3.9 3.5a4 4 0 0 0 0 5.7l4.2 4.1zm6.8-1.8c1.5.7 3.7.2 5.3-1.4 1.9-1.9 2.3-4.7.8-6.1-1.4-1.5-4.2-1.1-6.1.8-1.6 1.6-2.1 3.8-1.4 5.3L3.7 19.9l1.4 1.4 6.9-6.9 6.9 6.9 1.4-1.4-6.9-6.9 1.5-1.5z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path fill="currentColor" d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="#top" aria-label="Sheri's Place — back to top"><img src="images/logo.webp" alt="Sheri's"></a>
+    <nav class="topnav" aria-label="Main">
+      <a href="#menu">Menu</a>
+      <a href="#about">Our Story</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit</a>
+      <a href="#" id="eventsNav" hidden>Events</a>
+    </nav>
+    <a class="call-pill" href="tel:+18028854240"><svg width="18" height="18"><use href="#i-phone"/></svg>Call</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="sr-only">Sheri's Place — Family Restaurant in Springfield, Vermont</h1>
+      <div class="logo-wrap"><img class="hero-logo" src="images/logo.webp" alt="Sheri's" width="1774" height="887" fetchpriority="high"></div>
+      <p class="tagline rise r1">A family restaurant on Main Street</p>
+      <p class="since rise r2">Springfield, Vermont · Serving our neighbors since 2010</p>
+
+      <button class="status rise r3" id="hoursBtn" type="button" aria-haspopup="dialog">
+        <svg><use href="#i-clock"/></svg><span id="statusText">See our hours</span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z"/></svg>
+      </button>
+
+      <div class="actions rise r4">
+        <a class="btn btn-gold" href="tel:+18028854240"><svg><use href="#i-phone"/></svg>Call</a>
+        <a class="btn btn-light js-directions" href="https://www.google.com/maps/dir/?api=1&destination=Sheri%27s+Place%2C+30+Main+St%2C+Springfield%2C+VT+05156"><svg><use href="#i-pin"/></svg>Get Directions</a>
+        <a class="btn btn-ghost" href="#menu"><svg><use href="#i-menu"/></svg>See the Menu</a>
+      </div>
+
+      <a class="rating-chip rise r5" href="#reviews">
+        <span class="stars" style="--rating: 4.5" aria-hidden="true"></span>
+        <span>4.5 on Google · 205 reviews</span>
+      </a>
+
+      <button class="events-bar rise r5" id="eventsBtn" type="button" aria-haspopup="dialog" hidden>
+        <span class="date-tile" id="nextTile"></span>
+        <span class="ev-text"><small>Upcoming event</small><strong id="nextTitle"></strong></span>
+        <span class="go">All events &rarr;</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="wrap">
+      <div class="menu-head">
+        <div>
+          <h2>Our Menu</h2>
+          <p class="menu-note">American bar food &amp; Tex-Mex favorites</p>
+        </div>
+      </div>
+
+      <div class="chips" id="chips" role="tablist" aria-label="Menu sections"></div>
+      <div class="menu-track" id="menuList" aria-live="polite"></div>
+      <div class="menu-pager">
+        <button class="pager-btn" id="prevBtn" type="button"><span aria-hidden="true">&larr;</span><span id="prevLbl"></span></button>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+        <button class="pager-btn" id="nextBtn" type="button"><span id="nextLbl"></span><span aria-hidden="true">&rarr;</span></button>
+      </div>
+
+      <p class="menu-note" style="margin-top:22px">Menu items may change. Have an allergy? Just let your server know — we're happy to help.</p>
+      <div style="margin-top:16px"><a class="btn btn-brick" href="tel:+18028854240"><svg><use href="#i-phone"/></svg>Call to order takeout</a></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap about-grid">
+      <img class="about-photo" src="images/sheri-sign.jpg" width="1237" height="1237" alt="Sheri standing beside the Sheri's Family Restaurant sign on the brick building" loading="lazy">
+      <div>
+        <h2>Pull up a chair — you're family here.</h2>
+        <span class="badge-2010">Since 2010</span>
+        <p>Sheri opened her doors on Main Street in 2010 with a simple idea: good food, good friends, and a place that feels like home. More than a decade later, that hasn't changed.</p>
+        <p>Come in from the cold, grab a seat by the fireplace, and bring the whole crew — kids included. Whether it's burgers and wings or a sizzling Tex-Mex plate, we'll treat you like a regular from your very first visit.</p>
+        <div class="perks">
+          <div class="perk"><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s5 4.5 5 10a5 5 0 0 1-10 0c0-2.2 1-3.8 2-5 0 2 1 3 2 3 0-3 1-6 1-8z"/></svg><span>Cozy fireplace</span></div>
+          <div class="perk"><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="3"/><path d="M7 21v-6a5 5 0 0 1 10 0v6"/></svg><span>Kids' menu</span></div>
+          <div class="perk"><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1"/></svg><span>Free Wi-Fi</span></div>
+          <div class="perk"><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg><span>Family friendly</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="wrap">
+      <h2>Loved by our neighbors</h2>
+      <p class="menu-note">Don't take our word for it — see what guests have to say.</p>
+      <div class="review-cards">
+        <a class="rcard" href="https://www.google.com/maps/search/?api=1&query=Sheri%27s+Place+30+Main+St+Springfield+VT" target="_blank" rel="noopener">
+          <span class="logo" style="background:#fff;border:1px solid var(--line)" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2A11.9 11.9 0 0 1 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3a12 12 0 0 1-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"/></svg>
+          </span>
+          <span>
+            <span class="big">4.5 <span class="stars" style="--rating: 4.5; font-size:1.1rem" aria-hidden="true"></span></span>
+            <small>205 Google reviews</small>
+          </span>
+          <span class="go">Read →</span>
+        </a>
+        <a class="rcard" href="https://www.facebook.com/sherisrestaurant/reviews" target="_blank" rel="noopener">
+          <span class="logo" style="background:#1877f2;color:#fff" aria-hidden="true"><svg width="28" height="28"><use href="#i-fb"/></svg></span>
+          <span>
+            <span class="big" style="font-size:1.25rem">Facebook</span>
+            <small>Reviews &amp; recommendations</small>
+          </span>
+          <span class="go">Read →</span>
+        </a>
+        <a class="rcard" href="https://www.yelp.com/biz/sheris-place-springfield" target="_blank" rel="noopener">
+          <span class="logo" style="background:#d32323;color:#fff;font:800 1.05rem Nunito,sans-serif" aria-hidden="true">yelp</span>
+          <span>
+            <span class="big" style="font-size:1.25rem">Yelp</span>
+            <small>Reviews &amp; photos</small>
+          </span>
+          <span class="go">Read →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section id="visit" style="padding-top:8px">
+    <div class="wrap">
+      <h2>Find Us</h2>
+      <div class="visit-grid">
+      <iframe class="map" title="Map showing Sheri's Place at 30 Main St, Springfield, VT" loading="lazy"
+        src="https://maps.google.com/maps?q=Sheri%27s+Place,+30+Main+St,+Springfield,+VT+05156&z=16&output=embed"></iframe>
+      <div>
+      <p class="addr">30 Main St, Springfield, VT 05156</p>
+      <div class="two">
+        <a class="btn btn-brick" href="https://maps.apple.com/?daddr=30+Main+St,+Springfield,+VT+05156&q=Sheri%27s+Place">Apple Maps</a>
+        <a class="btn btn-outline" href="https://www.google.com/maps/dir/?api=1&destination=Sheri%27s+Place%2C+30+Main+St%2C+Springfield%2C+VT+05156">Google Maps</a>
+      </div>
+
+      <h3 id="hours" style="margin-top:34px;font-size:1.4rem;color:var(--brick-dark)">Hours</h3>
+      <table class="hours"><tbody class="js-hours"></tbody></table>
+      </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog class="sheet" id="eventsSheet" aria-labelledby="eventsTitle"><div class="sheet-body">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="eventsTitle">Upcoming Events</h2>
+    <button class="sheet-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="events-list" id="eventsList"></div>
+  <div class="loop">
+    <div>
+      <h3>Stay in the loop</h3>
+      <p>Hear about new events and happenings at Sheri's.</p>
+    </div>
+    <button class="btn btn-gold js-join" type="button">Join our email list</button>
+  </div>
+</div></dialog>
+
+<dialog class="sheet" id="signupSheet" aria-labelledby="signupTitle"><div class="sheet-body">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="signupTitle">Join our email list</h2>
+    <button class="sheet-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <form id="signupForm" novalidate>
+    <p class="form-sub" id="signupSub"></p>
+    <label class="field"><span>Name</span>
+      <input name="name" type="text" autocomplete="name" required></label>
+    <label class="field"><span>Email</span>
+      <input name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required></label>
+    <label class="hp" aria-hidden="true">Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
+    <button class="btn btn-brick" type="submit" id="signupSubmit">Sign me up</button>
+    <p class="form-error" id="signupError" hidden></p>
+    <p class="form-note">We'll only email you about Sheri's. Unsubscribe anytime.</p>
+  </form>
+  <div class="done" id="signupDone" hidden>
+    <div class="check"><svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+    <h3 id="doneTitle"></h3>
+    <p id="doneText"></p>
+    <button class="btn btn-outline" type="button" id="doneBtn" style="width:100%">Done</button>
+  </div>
+</div></dialog>
+
+<dialog class="sheet" id="hoursSheet" aria-labelledby="sheetTitle"><div class="sheet-body">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="sheetTitle">Hours</h2>
+    <button class="sheet-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <table class="hours"><tbody class="js-hours"></tbody></table>
+</div></dialog>
+
+<footer>
+  <div class="wrap">
+    <img src="images/logo.webp" alt="Sheri's" loading="lazy">
+    <p>A family restaurant · Since 2010</p>
+    <p>30 Main St, Springfield, VT 05156</p>
+    <p><a href="tel:+18028854240">(802) 885-4240</a></p>
+    <a class="fb-btn" href="https://www.facebook.com/sherisrestaurant" target="_blank" rel="noopener"><svg width="20" height="20"><use href="#i-fb"/></svg>Follow us on Facebook</a>
+    <p><button class="footer-join js-join" type="button">Join our email list</button></p>
+    <p style="opacity:.6;font-size:.85rem;margin-top:16px">© <span id="yr"></span> Sheri's Place</p>
+  </div>
+</footer>
+
+<!-- Sticky bottom bar: the three things people come here for -->
+<nav class="actionbar" aria-label="Quick actions">
+  <a class="primary" href="tel:+18028854240"><svg><use href="#i-phone"/></svg>Call</a>
+  <a class="js-directions" href="https://www.google.com/maps/dir/?api=1&destination=Sheri%27s+Place%2C+30+Main+St%2C+Springfield%2C+VT+05156"><svg><use href="#i-pin"/></svg>Directions</a>
+  <a href="#menu"><svg><use href="#i-menu"/></svg>Menu</a>
+</nav>
+
+<script>
+/* =====================================================================
+   EDIT HOURS HERE. 24-hour times. Use null for closed days.
+   TODO: confirm real hours with Sheri — these are placeholders
+   (Google only shows "Opens 5 PM").
+   ===================================================================== */
+const HOURS = {
+  Sunday:    ["17:00", "21:00"],
+  Monday:    ["17:00", "21:00"],
+  Tuesday:   ["17:00", "21:00"],
+  Wednesday: ["17:00", "21:00"],
+  Thursday:  ["17:00", "21:00"],
+  Friday:    ["17:00", "22:00"],
+  Saturday:  ["17:00", "22:00"],
+};
+
+/* =====================================================================
+   EMAIL SIGN-UPS (RSVPs + email list) → MailerLite
+   Both forms add the person to the MailerLite "Newsletter" form's list.
+   RSVP_EVENT_FIELD: to also record WHICH event someone RSVP'd to, create a
+   text field in MailerLite (Subscribers → Fields), add it to the form, and put
+   its field key here (e.g. "rsvp_event"). Leave "" to send just name + email.
+   ===================================================================== */
+const MAILERLITE_URL = "https://assets.mailerlite.com/jsonp/2694074/forms/200705264917153664/subscribe";
+const RSVP_EVENT_FIELD = "";
+
+/* =====================================================================
+   UPCOMING EVENTS — add new ones here. Dates are YYYY-MM-DD.
+   Past events hide themselves automatically the day after.
+   ===================================================================== */
+const EVENTS = [
+  { date: "2026-10-17", title: "Brunch & Book Swap", lines: ["Brunch 10 AM – 2 PM", "Book swap 2 – 4 PM"] },
+  { date: "2026-10-24", title: "Tarot Readings", lines: ["7 – 9 PM"] },
+  { date: "2026-10-31", title: "Karaoke & Costume Party", lines: ["With DJ Shirl", "7 – 10 PM"] },
+];
+
+/* =====================================================================
+   TODAY'S SPECIALS — update this list whenever the specials change.
+   Shown first in the menu. "d" (a short note) is optional.
+   ===================================================================== */
+const SPECIALS = [
+  { n: "Creamy Chicken & Veggie Soup" },
+  { n: "Beef Stew", d: "With garlic bread" },
+  { n: "Pepper Jack Bacon Burger" },
+  { n: "Fish Sandwich" },
+  { n: "Philly Cheesesteak" },
+  { n: "Southwest Egg Rolls" },
+  { n: "Homemade Apple Pie", d: "Dessert" },
+];
+
+/* =====================================================================
+   EDIT MENU HERE.
+   TODO: replace with Sheri's real menu — these are placeholders.
+   tags: "fav" = house favorite, "spicy" = spicy
+   ===================================================================== */
+const MENU = [
+  { name: "Today's Specials", special: true, d: "These change often — check back to see what's new.", items: SPECIALS },
+  { name: "Starters", items: [
+    { n: "Wings", d: "A dozen, tossed in buffalo, BBQ, or garlic parm. Celery & blue cheese.", t: ["fav"] },
+    { n: "Loaded Nachos", d: "Tortilla chips piled with cheese, jalapeños, pico, sour cream & guac." },
+    { n: "Mozzarella Sticks", d: "Golden fried with marinara." },
+    { n: "Jalapeño Poppers", d: "Cream cheese stuffed, ranch on the side.", t: ["spicy"] },
+  ]},
+  { name: "Burgers & Sandwiches", d: "Served with fries. Swap for onion rings or a side salad.", items: [
+    { n: "Sheri's Classic Burger", d: "Half-pound, lettuce, tomato, onion, choice of cheese.", t: ["fav"] },
+    { n: "Bacon BBQ Burger", d: "Cheddar, crispy bacon, onion rings, BBQ sauce." },
+    { n: "Grilled Chicken Club", d: "Bacon, Swiss, lettuce, tomato, mayo on toasted sourdough." },
+    { n: "Philly Cheesesteak", d: "Shaved steak, peppers, onions, melted provolone." },
+  ]},
+  { name: "Tex-Mex", items: [
+    { n: "Sizzling Fajitas", d: "Chicken or steak with peppers & onions, warm tortillas and all the fixings.", t: ["fav"] },
+    { n: "Chicken Quesadilla", d: "Grilled flour tortilla, cheese, peppers, salsa & sour cream." },
+    { n: "Beef Burrito", d: "Seasoned beef, rice, beans, cheese, smothered in red sauce.", t: ["spicy"] },
+    { n: "Taco Plate", d: "Three tacos, your choice of beef, chicken, or fish. Rice & beans." },
+  ]},
+  { name: "Comfort Plates", items: [
+    { n: "Fish & Chips", d: "Beer-battered haddock, fries, coleslaw, tartar." },
+    { n: "Chicken Tender Dinner", d: "Hand-breaded tenders, fries, honey mustard." },
+    { n: "Mac & Cheese", d: "Baked and bubbly. Add chicken or bacon." },
+  ]},
+  { name: "Kids", d: "For our guests 12 & under. Comes with a drink.", items: [
+    { n: "Chicken Tenders & Fries" },
+    { n: "Kids' Cheeseburger" },
+    { n: "Grilled Cheese" },
+    { n: "Mini Quesadilla" },
+  ]},
+];
+
+/* ---------------- Rendering (no edits needed below) ---------------- */
+const $ = (s) => document.querySelector(s);
+const slug = (s) => "m-" + s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+$("#chips").innerHTML = MENU.map((c, i) =>
+  `<button class="chip${c.special ? " chip-special" : ""}" type="button" role="tab" data-i="${i}" aria-controls="${slug(c.name)}">${esc(c.name)}</button>`).join("");
+$("#dots").innerHTML = MENU.map(() => "<i></i>").join("");
+
+$("#menuList").innerHTML = MENU.map((c) => `
+  <div class="menu-cat${c.special ? " special" : ""}" id="${slug(c.name)}" role="tabpanel"><div class="cat-inner${c.special ? " special-card" : ""}">
+    <h3>${esc(c.name)}</h3>
+    ${c.d ? `<p>${esc(c.d)}</p>` : ""}
+    <div class="items">${c.items.map((it) => `
+      <div class="item">
+        <h4>${esc(it.n)}${(it.t || []).map((t) => t === "fav"
+          ? '<span class="tag fav">House favorite</span>'
+          : '<span class="tag">Spicy</span>').join("")}</h4>
+        ${it.d ? `<p>${esc(it.d)}</p>` : ""}
+      </div>`).join("")}</div>
+  </div></div>`).join("");
+
+// Menu carousel
+const track = $("#menuList");
+const panels = [...track.children];
+const chips = [...document.querySelectorAll(".chip")];
+const dots = [...document.querySelectorAll("#dots i")];
+let current = -1;
+
+function fitHeight() { track.style.height = panels[current].offsetHeight + "px"; }
+
+function setActive(i) {
+  if (i === current) return;
+  current = i;
+  chips.forEach((ch, j) => {
+    ch.classList.toggle("active", j === i);
+    ch.setAttribute("aria-selected", j === i);
+  });
+  dots.forEach((d, j) => d.classList.toggle("on", j === i));
+  panels.forEach((p, j) => p.inert = j !== i);
+  // keep the active tab visible without moving the page up or down
+  const chip = chips[i], row = $("#chips");
+  row.scrollTo({ left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" });
+  $("#prevBtn").hidden = i === 0;
+  $("#nextBtn").hidden = i === MENU.length - 1;
+  $("#prevLbl").textContent = MENU[i - 1]?.name || "";
+  $("#nextLbl").textContent = MENU[i + 1]?.name || "";
+  fitHeight();
+}
+
+let target = null; // set while a tap-triggered slide is in progress
+function goTo(i) {
+  target = i;
+  setActive(i);
+  track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
+}
+
+chips.forEach((ch, i) => ch.addEventListener("click", () => goTo(i)));
+$("#prevBtn").addEventListener("click", () => goTo(Math.max(0, current - 1)));
+$("#nextBtn").addEventListener("click", () => goTo(Math.min(MENU.length - 1, current + 1)));
+track.addEventListener("scroll", () => {
+  const i = Math.round(track.scrollLeft / track.clientWidth);
+  if (target !== null) { if (i === target) target = null; return; }
+  setActive(i);
+}, { passive: true });
+track.addEventListener("touchstart", () => { target = null; }, { passive: true });
+window.addEventListener("resize", () => { track.scrollLeft = current * track.clientWidth; fitHeight(); });
+setActive(0);
+document.fonts?.ready.then(fitHeight);
+
+// Directions: send iPhone/iPad/Mac users to Apple Maps, everyone else to Google Maps
+const isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+if (isApple) {
+  document.querySelectorAll(".js-directions").forEach((a) => {
+    a.href = "https://maps.apple.com/?daddr=30+Main+St,+Springfield,+VT+05156&q=Sheri%27s+Place";
+  });
+}
+
+// Hours, always in Vermont time
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const fmt = (hm) => {
+  let [h, m] = hm.split(":").map(Number);
+  const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12;
+  return m ? `${h}:${String(m).padStart(2, "0")} ${ap}` : `${h} ${ap}`;
+};
+const vt = new Date(new Date().toLocaleString("en-US", { timeZone: "America/New_York" }));
+const today = DAYS[vt.getDay()];
+
+const rows = DAYS.map((d) => `
+  <tr class="${d === today ? "today" : ""}"><td>${d}${d === today ? " (today)" : ""}</td>
+  <td>${HOURS[d] ? fmt(HOURS[d][0]) + " – " + fmt(HOURS[d][1]) : "Closed"}</td></tr>`).join("");
+document.querySelectorAll(".js-hours").forEach((tb) => tb.innerHTML = rows);
+
+const h = HOURS[today];
+$("#statusText").textContent = h ? `Open today ${fmt(h[0])} – ${fmt(h[1])}` : "Closed today";
+
+// Pop-ups (hours + events) slide up from the bottom
+function closeSheet(sheet) {
+  if (!sheet.open || sheet.classList.contains("closing")) return;
+  sheet.classList.add("closing");
+  setTimeout(() => { sheet.classList.remove("closing"); sheet.close(); }, 220);
+}
+document.querySelectorAll(".sheet").forEach((sheet) => {
+  sheet.querySelector(".sheet-close").addEventListener("click", () => closeSheet(sheet));
+  sheet.addEventListener("click", (e) => { if (e.target === sheet) closeSheet(sheet); }); // tap outside
+  sheet.addEventListener("cancel", (e) => { e.preventDefault(); closeSheet(sheet); });    // Esc key
+});
+$("#hoursBtn").addEventListener("click", () => $("#hoursSheet").showModal());
+
+// Upcoming events (only today and later, Vermont time)
+const todayISO = `${vt.getFullYear()}-${String(vt.getMonth() + 1).padStart(2, "0")}-${String(vt.getDate()).padStart(2, "0")}`;
+const upcoming = EVENTS.filter((e) => e.date >= todayISO).sort((a, b) => a.date.localeCompare(b.date));
+const tile = (iso) => {
+  const d = new Date(iso + "T12:00:00");
+  const mo = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+  const wd = d.toLocaleString("en-US", { weekday: "short" }).toUpperCase();
+  return `<span class="mo">${mo}</span><span class="dy">${d.getDate()}</span><span class="wd">${iso === todayISO ? "TODAY" : wd}</span>`;
+};
+if (upcoming.length) {
+  const next = upcoming[0];
+  $("#nextTile").innerHTML = tile(next.date);
+  $("#nextTitle").textContent = next.title;
+  $("#eventsBtn").hidden = false;
+  $("#eventsNav").hidden = false;
+  $("#eventsList").innerHTML = upcoming.map((e) => `
+    <div class="event">
+      <span class="date-tile">${tile(e.date)}</span>
+      <div><h3>${esc(e.title)}</h3>${e.lines.map((l) => `<p>${esc(l)}</p>`).join("")}</div>
+      <button class="rsvp-btn" type="button" data-date="${e.date}" aria-label="RSVP for ${esc(e.title)}">RSVP</button>
+    </div>`).join("");
+  document.querySelectorAll(".rsvp-btn").forEach((b) =>
+    b.addEventListener("click", () => openSignup(upcoming.find((e) => e.date === b.dataset.date))));
+  const openEvents = (e) => { e.preventDefault(); $("#eventsSheet").showModal(); };
+  $("#eventsBtn").addEventListener("click", openEvents);
+  $("#eventsNav").addEventListener("click", openEvents);
+}
+// Sign-up pop-up: RSVP for one event, or join the general email list
+const signup = { sheet: $("#signupSheet"), form: $("#signupForm"), event: null };
+const longDate = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+function openSignup(event) {
+  signup.event = event || null;
+  $("#signupTitle").textContent = event ? `RSVP: ${event.title}` : "Join our email list";
+  $("#signupSub").textContent = event
+    ? `${longDate(event.date)}. Leave your name and email and we'll keep you posted on this event and other happenings at Sheri's.`
+    : "Be the first to hear about events, specials and news from Sheri's.";
+  $("#signupSubmit").textContent = event ? "Count me in" : "Sign me up";
+  signup.form.hidden = false; $("#signupDone").hidden = true; $("#signupError").hidden = true;
+  signup.sheet.showModal();
+}
+document.querySelectorAll(".js-join").forEach((b) => b.addEventListener("click", () => openSignup(null)));
+$("#doneBtn").addEventListener("click", () => closeSheet(signup.sheet));
+
+signup.form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = signup.form, err = $("#signupError"), btn = $("#signupSubmit");
+  if (!f.checkValidity()) {
+    err.textContent = "Please enter your name and a valid email."; err.hidden = false;
+    f.querySelector(":invalid").focus(); return;
+  }
+  err.hidden = true;
+  if (f.elements.website.value) return; // spam bot filled the hidden field
+  const data = {
+    event: signup.event?.title || "", eventDate: signup.event?.date || "",
+    name: f.elements.name.value.trim(), email: f.elements.email.value.trim(),
+  };
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    const body = new URLSearchParams({ "fields[name]": data.name, "fields[email]": data.email, "ml-submit": "1", anticsrf: "true" });
+    if (signup.event && RSVP_EVENT_FIELD) body.set(`fields[${RSVP_EVENT_FIELD}]`, `${data.event} (${data.eventDate})`);
+    const res = await fetch(MAILERLITE_URL, { method: "POST", headers: { Accept: "application/json" }, body });
+    const out = await res.json().catch(() => ({}));
+    if (!out.success) {
+      const emailErr = out.errors?.fields?.email?.[0];
+      throw new Error(emailErr ? "Please double-check your email address." : "");
+    }
+    const first = data.name.split(" ")[0];
+    $("#doneTitle").textContent = signup.event ? `See you there, ${first}!` : `You're on the list, ${first}!`;
+    $("#doneText").textContent = signup.event
+      ? `You're down for ${signup.event.title} on ${longDate(signup.event.date)}. We'll email you if anything changes.`
+      : "Keep an eye on your inbox for news from Sheri's.";
+    f.reset(); f.hidden = true; $("#signupDone").hidden = false;
+  } catch (x) {
+    err.textContent = x.message || "Something went wrong. Please try again, or give us a call."; err.hidden = false;
+  } finally {
+    btn.disabled = false; btn.textContent = signup.event ? "Count me in" : "Sign me up";
+  }
+});
+
+$("#yr").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

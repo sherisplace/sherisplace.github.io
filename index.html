@@ -51,7 +51,6 @@
     --green: #2f7d3a;
     --radius: 18px;
     --shadow: 0 6px 20px rgba(74, 15, 10, .12);
-    --bar-h: 72px;
     --gutter: 16px;
   }
   * { box-sizing: border-box; }
@@ -61,7 +60,6 @@
     background: var(--cream);
     color: var(--ink);
     font: 400 17px/1.55 "Nunito", system-ui, -apple-system, sans-serif;
-    padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom));
   }
   img { max-width: 100%; height: auto; display: block; }
   a { color: var(--brick); }
@@ -201,7 +199,7 @@
   .menu-track {
     display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden;
     scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
-    margin: 0 calc(-1 * var(--gutter)); transition: height .3s ease;
+    margin: 0 calc(-1 * var(--gutter));
   }
   .menu-track::-webkit-scrollbar { display: none; }
   .menu-cat { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; padding: 18px var(--gutter) 4px; }
@@ -263,7 +261,7 @@
   .hours tr.today td:first-child { font-weight: 800; color: var(--brick); }
 
   /* ---------- Footer ---------- */
-  footer { background: var(--brick-dark); color: #f3e4d4; text-align: center; padding: 36px 0 30px; }
+  footer { background: var(--brick-dark); color: #f3e4d4; text-align: center; padding: 36px 0 calc(30px + env(safe-area-inset-bottom)); }
   footer img { width: 200px; margin: 0 auto 10px; }
   footer a { color: var(--gold-soft); font-weight: 700; }
   footer p { margin: 6px 0; }
@@ -371,27 +369,10 @@
   .done h3 { font-size: 1.4rem; color: var(--brick-dark); }
   .done p { color: var(--muted); margin: 6px 0 18px; }
 
-  /* ---------- Sticky bottom action bar (phones) ---------- */
-  .actionbar {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    background: var(--paper); border-top: 1px solid var(--line);
-    box-shadow: 0 -6px 20px rgba(74,15,10,.12);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  .actionbar a {
-    height: var(--bar-h); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    text-decoration: none; color: var(--brick); font-weight: 800; font-size: .85rem;
-  }
-  .actionbar a svg { width: 26px; height: 26px; }
-  .actionbar a.primary { background: var(--brick); color: #fff; }
-
   /* ---------- Bigger screens ---------- */
   @media (min-width: 760px) {
     :root { --gutter: 32px; }
-    body { padding-bottom: 0; }
     section { padding: 64px 0; }
-    .actionbar { display: none; }
     .topnav { display: flex; }
     .actions { grid-template-columns: repeat(3, 1fr); max-width: 640px; }
     .events-bar { max-width: 640px; }
@@ -647,12 +628,6 @@
   </div>
 </footer>
 
-<!-- Sticky bottom bar: the three things people come here for -->
-<nav class="actionbar" aria-label="Quick actions">
-  <a class="primary" href="tel:+18028854240"><svg><use href="#i-phone"/></svg>Call</a>
-  <a class="js-directions" href="https://www.google.com/maps/dir/?api=1&destination=Sheri%27s+Place%2C+30+Main+St%2C+Springfield%2C+VT+05156"><svg><use href="#i-pin"/></svg>Directions</a>
-  <a href="#menu"><svg><use href="#i-menu"/></svg>Menu</a>
-</nav>
 
 <script>
 /* =====================================================================
@@ -771,7 +746,11 @@ const chips = [...document.querySelectorAll(".chip")];
 const dots = [...document.querySelectorAll("#dots i")];
 let current = -1;
 
-function fitHeight() { track.style.height = panels[current].offsetHeight + "px"; }
+// One steady height for every section (the tallest one), so the page never jumps while swiping
+function fitHeight() {
+  track.style.height = "auto";
+  track.style.height = Math.max(...panels.map((p) => p.offsetHeight)) + "px";
+}
 
 function setActive(i) {
   if (i === current) return;
@@ -789,27 +768,32 @@ function setActive(i) {
   $("#nextBtn").hidden = i === MENU.length - 1;
   $("#prevLbl").textContent = MENU[i - 1]?.name || "";
   $("#nextLbl").textContent = MENU[i + 1]?.name || "";
-  fitHeight();
 }
 
-let target = null; // set while a tap-triggered slide is in progress
 function goTo(i) {
-  target = i;
   setActive(i);
   track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
 }
-
 chips.forEach((ch, i) => ch.addEventListener("click", () => goTo(i)));
 $("#prevBtn").addEventListener("click", () => goTo(Math.max(0, current - 1)));
 $("#nextBtn").addEventListener("click", () => goTo(Math.min(MENU.length - 1, current + 1)));
-track.addEventListener("scroll", () => {
-  const i = Math.round(track.scrollLeft / track.clientWidth);
-  if (target !== null) { if (i === target) target = null; return; }
-  setActive(i);
-}, { passive: true });
-track.addEventListener("touchstart", () => { target = null; }, { passive: true });
-window.addEventListener("resize", () => { track.scrollLeft = current * track.clientWidth; fitHeight(); });
+
+// Only update tabs/dots once a swipe has come to rest — nothing changes mid-gesture
+const settle = () => setActive(Math.round(track.scrollLeft / track.clientWidth));
+let settleTimer;
+track.addEventListener("scroll", () => { clearTimeout(settleTimer); settleTimer = setTimeout(settle, 120); }, { passive: true });
+if ("onscrollend" in window) track.addEventListener("scrollend", () => { clearTimeout(settleTimer); settle(); });
+
+// Phones fire "resize" when the address bar slides in/out; only react to real width changes
+let lastWidth = window.innerWidth;
+window.addEventListener("resize", () => {
+  if (window.innerWidth === lastWidth) return;
+  lastWidth = window.innerWidth;
+  fitHeight();
+  track.scrollTo({ left: current * track.clientWidth });
+});
 setActive(0);
+fitHeight();
 document.fonts?.ready.then(fitHeight);
 
 // Directions: send iPhone/iPad/Mac users to Apple Maps, everyone else to Google Maps
@@ -909,11 +893,13 @@ signup.form.addEventListener("submit", async (e) => {
   };
   btn.disabled = true; btn.textContent = "Sending…";
   try {
-    const body = new URLSearchParams({ "fields[name]": data.name, "fields[email]": data.email, "ml-submit": "1", anticsrf: "true" });
-    if (signup.event && RSVP_EVENT_FIELD) body.set(`fields[${RSVP_EVENT_FIELD}]`, `${data.event} (${data.eventDate})`);
-    const res = await fetch(MAILERLITE_URL, { method: "POST", headers: { Accept: "application/json" }, body });
+    // Same request MailerLite's own embed script sends (GET + ajax=1)
+    const q = new URLSearchParams({ "fields[name]": data.name, "fields[email]": data.email, "ml-submit": "1", anticsrf: "true", ajax: "1" });
+    if (signup.event && RSVP_EVENT_FIELD) q.set(`fields[${RSVP_EVENT_FIELD}]`, `${data.event} (${data.eventDate})`);
+    const res = await fetch(`${MAILERLITE_URL}?${q}`, { headers: { Accept: "application/json" } });
     const out = await res.json().catch(() => ({}));
-    if (!out.success) {
+    if (!out.success && !out.fieldsToConfirm?.length) {
+      console.warn("MailerLite response:", res.status, out);
       const emailErr = out.errors?.fields?.email?.[0];
       throw new Error(emailErr ? "Please double-check your email address." : "");
     }

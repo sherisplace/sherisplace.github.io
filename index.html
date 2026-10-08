@@ -350,6 +350,28 @@
   .loop p { margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
   .loop .btn { min-height: 46px; font-size: .98rem; flex: 1 1 160px; white-space: nowrap; padding: 0 22px; }
 
+  /* QR welcome pop-up */
+  .welcome { text-align: center; }
+  .welcome .s-mark { width: 76px; margin: 0 auto 8px; }
+  .welcome h2 { font-size: 1.9rem; color: var(--brick); }
+  .welcome .hi { color: var(--muted); margin: 6px 0 14px; }
+  .welcome-specials { background: var(--cream); border: 2px solid var(--gold); border-radius: 16px; padding: 12px 16px; margin-bottom: 14px; text-align: left; }
+  .welcome-specials small { display: block; font-weight: 800; color: var(--brick-dark); margin-bottom: 4px; }
+  .welcome-specials ul { margin: 0; padding-left: 18px; }
+  .welcome-specials li { font-weight: 700; padding: 2px 0; }
+  .welcome-specials .more { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+  .review-cta {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding: 12px 14px; border-radius: 16px;
+    background: #fff; border: 2px solid var(--line); text-decoration: none; color: var(--ink); text-align: left;
+  }
+  .review-cta .g { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line); }
+  .review-cta span { flex: 1; min-width: 0; }
+  .review-cta strong { display: block; font-size: 1.02rem; }
+  .review-cta small { display: block; color: var(--muted); font-size: .88rem; line-height: 1.35; }
+  .review-cta .go { flex: none; font-weight: 800; color: var(--red); white-space: nowrap; }
+  .welcome-actions { display: grid; gap: 10px; }
+  .welcome-actions .btn { width: 100%; }
+
   /* Sign-up form (RSVP + email list) */
   .form-sub { margin: 4px 0 16px; color: var(--muted); }
   .field { display: block; margin-bottom: 14px; }
@@ -516,7 +538,7 @@
       <h2>Loved by our neighbors</h2>
       <p class="menu-note">Don't take our word for it — see what guests have to say.</p>
       <div class="review-cards">
-        <a class="rcard" href="https://www.google.com/maps/search/?api=1&query=Sheri%27s+Place+30+Main+St+Springfield+VT" target="_blank" rel="noopener">
+        <a class="rcard" href="https://www.google.com/maps/place/?q=place_id:ChIJ8wk_gq654YkRvQe5m3YmBgE" target="_blank" rel="noopener">
           <span class="logo" style="background:#fff;border:1px solid var(--line)" aria-hidden="true">
             <svg width="28" height="28" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2A11.9 11.9 0 0 1 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3a12 12 0 0 1-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"/></svg>
           </span>
@@ -581,6 +603,29 @@
       <p>Hear about new events and happenings at Sheri's.</p>
     </div>
     <button class="btn btn-gold js-join" type="button">Join our email list</button>
+  </div>
+</div></dialog>
+
+<dialog class="sheet welcome" id="welcomeSheet" aria-labelledby="welcomeTitle"><div class="sheet-body">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-head" style="justify-content:flex-end"><button class="sheet-close" type="button" aria-label="Close">&times;</button></div>
+  <img class="s-mark" src="images/s-mark.webp" alt="" width="76" height="76">
+  <h2 id="welcomeTitle">Welcome to Sheri's!</h2>
+  <p class="hi">So glad you're here. Here's what's good right now.</p>
+  <div class="welcome-specials">
+    <small>Today's specials</small>
+    <ul id="welcomeSpecials"></ul>
+    <div class="more" id="welcomeMore"></div>
+  </div>
+  <a class="review-cta" href="https://search.google.com/local/writereview?placeid=ChIJ8wk_gq654YkRvQe5m3YmBgE" target="_blank" rel="noopener">
+    <span class="g" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2A11.9 11.9 0 0 1 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3a12 12 0 0 1-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"/></svg></span>
+    <span><strong>Enjoying your visit?</strong><small>A quick Google review means the world to a small family restaurant.</small></span>
+    <span class="go">Review &rarr;</span>
+  </a>
+  <div class="welcome-actions">
+    <button class="btn btn-gold" type="button" id="wSpecials">See the full menu</button>
+    <button class="btn btn-outline" type="button" id="wEvents" hidden>Upcoming events</button>
+    <button class="btn btn-outline" type="button" id="wJoin">Join our email list</button>
   </div>
 </div></dialog>
 
@@ -977,6 +1022,33 @@ signup.form.addEventListener("submit", async (e) => {
     btn.disabled = false; btn.textContent = signup.event ? "Count me in" : "Sign me up";
   }
 });
+
+/* =====================================================================
+   QR CODE WELCOME: links with ?qr in them (e.g. https://sherisplacevt.com/?qr=table)
+   open this pop-up once per visit. People who type the address or click a
+   normal link never see it.
+   ===================================================================== */
+const params = new URLSearchParams(location.search);
+if (params.has("qr")) {
+  // tidy the address bar so a shared or bookmarked link doesn't re-trigger it
+  params.delete("qr");
+  history.replaceState(null, "", location.pathname + (params.toString() ? `?${params}` : "") + location.hash);
+  let seen = false;
+  try { seen = sessionStorage.getItem("qrWelcome") === "1"; sessionStorage.setItem("qrWelcome", "1"); } catch {}
+
+  const welcome = $("#welcomeSheet");
+  const top = SPECIALS.slice(0, 3);
+  $("#welcomeSpecials").innerHTML = top.map((it) => `<li>${esc(it.n)}</li>`).join("");
+  $("#welcomeMore").textContent = SPECIALS.length > 3 ? `+ ${SPECIALS.length - 3} more on the menu` : "";
+  const then = (fn) => { closeSheet(welcome); setTimeout(fn, 240); };
+  $("#wSpecials").addEventListener("click", () => then(() => { goTo(0); $("#menu").scrollIntoView({ behavior: "smooth" }); }));
+  $("#wJoin").addEventListener("click", () => then(() => openSignup(null)));
+  if (upcoming.length) {
+    $("#wEvents").hidden = false;
+    $("#wEvents").addEventListener("click", () => then(() => $("#eventsSheet").showModal()));
+  }
+  if (!seen) setTimeout(() => welcome.showModal(), 1200); // after the logo writes itself in
+}
 
 $("#yr").textContent = new Date().getFullYear();
 </script>

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sheri's Place Brand Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @page { size: 8.5in 11in; margin: 0; }
+  :root {
+    --brick: #7A1C14; --hearth: #4A0F0A; --chili: #C8261B; --gold: #F4B324; --yellow: #FCCA4B;
+    --cream: #FBF4E8; --paper: #FFFAF1; --butter: #FFE7A8; --peach: #FDEBD0; --linen: #EAD9BF;
+    --ink: #2B1A14; --walnut: #6F5A4E;
+  }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; background: #ddd; }
+  body { font: 400 10.5pt/1.5 "Nunito", sans-serif; color: var(--ink); }
+  h1, h2, h3 { font-family: "Fraunces", Georgia, serif; margin: 0; line-height: 1.1; }
+  .page {
+    width: 8.5in; height: 11in; position: relative; overflow: hidden;
+    background: var(--cream); padding: 0.75in 0.75in 0.6in; page-break-after: always; break-after: page;
+    margin: 0 auto;
+  }
+  .page:last-child { page-break-after: auto; break-after: auto; }
+  @media screen { .page { margin: 24px auto; box-shadow: 0 4px 20px rgba(0,0,0,.15); } }
+
+  /* shared page furniture */
+  .pg-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35in; }
+  .pg-head .num { font: 800 9pt "Nunito"; color: var(--walnut); letter-spacing: .08em; }
+  .pg-head img { height: 30px; }
+  .stripe { position: absolute; left: 0; right: 0; height: 10px;
+    background: repeating-linear-gradient(-45deg, var(--chili) 0 5px, transparent 5px 11px); opacity: .85; }
+  .stripe.top { top: 0; } .stripe.bot { bottom: 0; }
+  h2.title { font-size: 34pt; font-weight: 800; color: var(--brick); }
+  .lede { font-size: 12.5pt; color: var(--walnut); max-width: 5.6in; margin: 10px 0 0; }
+  .rule { border: 0; border-top: 2px dashed var(--linen); margin: 0.3in 0; }
+  h3 { font-size: 15pt; color: var(--hearth); margin-bottom: 6px; }
+  p { margin: 0 0 8px; }
+  .small { font-size: 9pt; color: var(--walnut); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.22in; }
+  .card { background: var(--paper); border: 1px solid var(--linen); border-radius: 14px; padding: 16px 18px; }
+
+  /* ---------- cover ---------- */
+  .cover { padding: 0; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    background: radial-gradient(ellipse at 50% 32%, rgba(244,179,36,.30), transparent 55%), linear-gradient(180deg, #6E1B11 0%, #5A140D 45%, #360A06 100%); }
+  .cover::before { content: ""; position: absolute; inset: 0; background: url("../images/storefront.webp") 30% center / cover no-repeat; opacity: .12; }
+  .cover > * { position: relative; }
+  .cover .logo { width: 5.4in; filter: drop-shadow(0 10px 24px rgba(0,0,0,.4)); }
+  .cover h1 { font-size: 40pt; font-weight: 600; color: var(--butter); margin-top: 0.35in; }
+  .cover .sub { font: 700 12pt "Nunito"; letter-spacing: .04em; opacity: .9; margin-top: 10px; }
+  .cover .foot { position: absolute; bottom: 0.6in; font-size: 9.5pt; opacity: .7; }
+
+  /* ---------- feel ---------- */
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.2in; margin-top: 0.3in; }
+  .pillar { background: var(--paper); border: 1px solid var(--linen); border-left: 6px solid var(--gold); border-radius: 12px; padding: 14px 16px; }
+  .pillar h3 { font-size: 14pt; }
+  .voice { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25in; }
+  .say, .avoid { border-radius: 14px; padding: 16px 18px; }
+  .say { background: #EAF4E4; border: 1px solid #C9DFC0; }
+  .avoid { background: #FBE6E2; border: 1px solid #F0C4BC; }
+  .say h3 { color: #2F6B2A; } .avoid h3 { color: var(--chili); }
+  .say ul, .avoid ul { margin: 0; padding-left: 18px; } .say li, .avoid li { margin-bottom: 5px; }
+
+  /* ---------- logos ---------- */
+  .logo-tile { border-radius: 16px; display: grid; place-items: center; padding: 26px; height: 2.35in; position: relative; }
+  .logo-tile img { max-width: 100%; max-height: 100%; }
+  .logo-tile .cap { position: absolute; left: 14px; bottom: 10px; font: 800 8pt "Nunito"; letter-spacing: .06em; opacity: .75; }
+  .on-dark { background: linear-gradient(180deg, #6E1B11, #360A06); color: #fff; }
+  .on-cream { background: var(--paper); border: 1px solid var(--linen); color: var(--walnut); }
+  .on-gold { background: var(--gold); color: var(--hearth); }
+  .logo-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 0.22in; margin-bottom: 0.22in; }
+  .logo-row2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.22in; }
+
+  /* ---------- logo rules ---------- */
+  .clear { background: var(--paper); border: 1px solid var(--linen); border-radius: 16px; padding: 0.3in; display: grid; place-items: center; }
+  .clear .box { position: relative; padding: 0.42in; outline: 2px dashed var(--chili); outline-offset: -1px; }
+  .clear .box img { width: 2.4in; display: block; }
+  .clear .box .x { position: absolute; font: 800 10pt "Fraunces"; color: var(--chili); }
+  .donts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.16in; margin-top: 0.15in; }
+  .dont { text-align: center; }
+  .dont .t { height: 1.15in; border-radius: 12px; background: var(--paper); border: 1px solid var(--linen); display: grid; place-items: center; overflow: hidden; position: relative; }
+  .dont .t img { width: 1.45in; }
+  .dont .t::after { content: "×"; position: absolute; top: 4px; right: 8px; font: 800 16pt "Nunito"; color: var(--chili); }
+  .dont p { font-size: 8.5pt; margin-top: 6px; color: var(--walnut); font-weight: 700; }
+
+  /* ---------- color ---------- */
+  .swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.18in; }
+  .sw { border-radius: 14px; overflow: hidden; border: 1px solid var(--linen); background: var(--paper); }
+  .sw .chip { height: 1.05in; padding: 10px 12px; display: flex; align-items: flex-end; font: 800 12.5pt "Fraunces"; }
+  .sw .meta { padding: 8px 12px 10px; font-size: 8.3pt; line-height: 1.45; }
+  .sw .meta b { font-size: 9pt; }
+  .sw .meta i { color: var(--walnut); font-style: normal; display: block; margin-top: 3px; }
+  .support { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.12in; }
+  .support .sw .chip { height: 0.6in; font-size: 10pt; }
+  .support .sw .meta { font-size: 7.6pt; padding: 6px 8px 8px; }
+  .grads { display: grid; grid-template-columns: 1fr 1fr; gap: 0.18in; }
+  .grad { height: 0.62in; border-radius: 12px; color: #fff; display: flex; align-items: center; padding: 0 14px; font: 800 10pt "Nunito"; }
+
+  /* ---------- type ---------- */
+  .type-spec { display: grid; grid-template-columns: 1.15in 1fr; gap: 0.18in; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--linen); }
+  .type-spec .lbl { font: 800 8.5pt "Nunito"; color: var(--walnut); letter-spacing: .05em; line-height: 1.4; }
+  .type-spec .lbl span { display: block; font-weight: 600; letter-spacing: 0; }
+  .font-card { border-radius: 16px; padding: 18px 20px; }
+  .font-card .big { font-size: 46pt; line-height: 1; }
+  .font-card .alpha { font-size: 11pt; margin-top: 8px; color: var(--walnut); letter-spacing: .02em; }
+
+  /* ---------- elements ---------- */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 12px; font: 800 11pt "Nunito"; }
+  .b-gold { background: var(--gold); color: var(--hearth); box-shadow: 0 3px 0 #c98a0a; }
+  .b-brick { background: var(--brick); color: #fff; }
+  .b-white { background: #fff; color: var(--brick); border: 1px solid var(--linen); }
+  .b-outline { background: var(--paper); color: var(--brick); border: 2px solid var(--linen); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chipx { padding: 7px 14px; border-radius: 999px; font: 800 9.5pt "Nunito"; background: var(--paper); border: 2px solid var(--linen); }
+  .chipx.on { background: var(--brick); border-color: var(--brick); color: #fff; }
+  .chipx.sp { background: var(--gold); border-color: var(--gold); color: var(--hearth); }
+  .el { margin-bottom: 0.22in; }
+  .el .name { font: 800 8.5pt "Nunito"; color: var(--walnut); letter-spacing: .05em; margin-bottom: 8px; }
+  .date-tile { width: 54px; border-radius: 11px; overflow: hidden; text-align: center; background: #fff; border: 1px solid var(--linen); line-height: 1.1; display: inline-block; vertical-align: middle; }
+  .date-tile .mo { display: block; background: var(--brick); color: #fff; font: 800 7.5pt "Nunito"; letter-spacing: .08em; padding: 3px 0; }
+  .date-tile .dy { display: block; font: 800 17pt "Fraunces"; color: var(--hearth); padding-top: 2px; }
+  .date-tile .wd { display: block; font: 800 7pt "Nunito"; color: var(--walnut); padding-bottom: 4px; }
+  .stars { color: var(--gold); font-size: 14pt; letter-spacing: 1px; }
+  .note { background: var(--peach); color: var(--hearth); font-weight: 700; border-radius: 10px; padding: 10px 12px; font-size: 9.5pt; }
+  .sp-card { background: var(--paper); border: 2px solid var(--gold); border-radius: 14px; padding: 12px 16px; box-shadow: 0 6px 16px rgba(74,15,10,.1); }
+  .sp-card h4 { font: 800 14pt "Fraunces"; color: var(--hearth); margin: 0 0 4px; padding-bottom: 6px; border-bottom: 2px dashed var(--butter); }
+  .sp-card div { font: 800 10pt "Nunito"; padding: 5px 0; border-bottom: 1px solid var(--linen); }
+  .sp-card div:last-child { border: 0; }
+  .stripe-demo { height: 16px; border-radius: 4px; background: repeating-linear-gradient(-45deg, var(--chili) 0 6px, var(--paper) 6px 13px); }
+  .dash-demo { border-top: 2px dashed var(--linen); margin-top: 8px; }
+
+  /* ---------- menu starter ---------- */
+  .menu-wrap { display: grid; grid-template-columns: 3.55in 1fr; gap: 0.3in; align-items: start; }
+  .mock { background: var(--paper); border-radius: 6px; box-shadow: 0 8px 26px rgba(43,26,20,.18); position: relative; padding: 0.32in 0.3in 0.32in; }
+  .mock::before, .mock::after { content: ""; position: absolute; left: 0; right: 0; height: 8px; background: repeating-linear-gradient(-45deg, var(--chili) 0 4px, transparent 4px 9px); }
+  .mock::before { top: 0; } .mock::after { bottom: 0; }
+  .mock .s { width: 0.42in; display: block; margin: 0 auto 2px; }
+  .mock h4 { font: 800 21pt "Fraunces"; color: var(--brick); text-align: center; margin: 2px 0 2px; }
+  .mock .tag { text-align: center; font-size: 7pt; color: var(--walnut); margin-bottom: 8px; }
+  .mi { display: grid; grid-template-columns: 1fr auto; column-gap: 6px; padding: 2.5px 0; }
+  .mi b { font: 800 8.4pt "Nunito"; text-transform: uppercase; letter-spacing: .03em; }
+  .mi .pr { font: 800 8.6pt "Nunito"; color: var(--brick); }
+  .mi .lead { border-bottom: 1.5px dotted var(--linen); transform: translateY(-3px); }
+  .mi > span:first-child { display: flex; gap: 6px; align-items: baseline; }
+  .mi > span:first-child .lead { flex: 1; }
+  .mi i { grid-column: 1 / -1; font-style: normal; font-size: 7.2pt; color: var(--walnut); line-height: 1.3; }
+  .mock .mnote { margin-top: 8px; background: var(--peach); border-radius: 6px; padding: 6px 8px; font: 700 7pt "Nunito"; color: var(--hearth); text-align: center; }
+  .specs { font-size: 9.5pt; }
+  .specs table { width: 100%; border-collapse: collapse; }
+  .specs td { padding: 6px 0; border-bottom: 1px solid var(--linen); vertical-align: top; }
+  .specs td:first-child { font-weight: 800; width: 1.35in; color: var(--hearth); }
+  .ideas { font-size: 9pt; line-height: 1.4; }
+  .ideas li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<!-- 1. COVER -->
+<section class="page cover">
+  <img class="logo" src="../images/logo.webp" alt="Sheri's">
+  <h1>Brand Guide</h1>
+  <div class="sub">Sheri's Place · A family restaurant on Main Street · Since 2010</div>
+  <div class="foot">30 Main St, Springfield, VT · Colors, type, logos and elements for the website, menus and everything after</div>
+</section>
+
+<!-- 2. THE FEEL -->
+<section class="page">
+  <div class="stripe top"></div>
+  <div class="pg-head"><img src="../images/logo.webp" alt=""><span class="num">01 · THE FEEL</span></div>
+  <h2 class="title">Like walking into a neighbor's kitchen.</h2>
+  <p class="lede">Sheri's is a warm, unfussy, family place on Main Street: brick walls, a fireplace, comfort food and Tex-Mex, and people who know your name. Everything we make should feel cozy first and polished second, and it should always be easy to use.</p>
+
+  <div class="pillars">
+    <div class="pillar"><h3>Warm, not slick</h3><p>Brick reds, butter golds and cream paper. Rounded corners, soft shadows. Nothing cold, gray or corporate.</p></div>
+    <div class="pillar"><h3>Easy above all</h3><p>Big tap targets, plain words, the phone number and directions always one tap away. If someone has to hunt, we've failed.</p></div>
+    <div class="pillar"><h3>A little bit of sparkle</h3><p>The gold script logo is the showpiece. Let it shine on dark brick; keep everything around it calm.</p></div>
+    <div class="pillar"><h3>Real, not stock</h3><p>Use real photos of the building, the food and Sheri. Never stock photography or AI-looking imagery.</p></div>
+  </div>
+
+  <hr class="rule">
+  <h3 style="margin-bottom:12px">How we sound</h3>
+  <div class="voice">
+    <div class="say"><h3>Say it like this</h3>
+      <ul>
+        <li>"Pull up a chair — you're family here."</li>
+        <li>"Hand cut fries, homemade marinara."</li>
+        <li>"Have an allergy? Just let your server know."</li>
+        <li>Short sentences. Friendly. Specific about the food.</li>
+      </ul>
+    </div>
+    <div class="avoid"><h3>Steer clear of</h3>
+      <ul>
+        <li>Emojis, anywhere.</li>
+        <li>Small red ALL-CAPS labels stacked above headings ("WHAT FOLKS ARE SAYING"). They read as generic and templated.</li>
+        <li>Prices on the website (keep them on the printed menu).</li>
+        <li>Buzzwords like "elevated," "curated" or "experience."</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stripe bot"></div>
+</section>
+
+<!-- 3. LOGOS -->
+<section class="page">
+  <div class="stripe top"></div>
+  <div class="pg-head"><img src="../images/logo.webp" alt=""><span class="num">02 · LOGOS</span></div>
+  <h2 class="title">The family of marks</h2>
+  <p class="lede">Three marks, each with a job. The gold script is the headliner, the S is the shorthand, and the illustrated badge is the hometown classic.</p>
+  <hr class="rule" style="margin:0.22in 0">
+
+  <div class="logo-row">
+    <div class="logo-tile on-dark"><img src="../images/logo.webp" alt="Gold script logo"><span class="cap">PRIMARY · GOLD SCRIPT ON BRICK</span></div>
+    <div class="logo-tile on-cream"><img src="../images/logo.webp" alt="Gold script logo on cream"><span class="cap">PRIMARY · ON CREAM</span></div>
+  </div>
+  <div class="logo-row2">
+    <div class="logo-tile on-cream"><img src="../images/s-mark.webp" alt="S monogram" style="height:1.5in"><span class="cap">S MONOGRAM</span></div>
+    <div class="logo-tile on-dark"><img src="../images/s-mark.webp" alt="S monogram on brick" style="height:1.5in"><span class="cap">S MONOGRAM · ON BRICK</span></div>
+    <div class="logo-tile on-gold" style="padding:0;overflow:hidden"><img src="../images/sheri-sign.jpg" alt="Illustrated badge on the building" style="width:100%;height:100%;object-fit:cover;max-height:none"><span class="cap" style="color:#fff;text-shadow:0 1px 3px #000">HERITAGE BADGE (ON THE BUILDING)</span></div>
+  </div>
+
+  <div class="grid3" style="margin-top:0.28in">
+    <div><h3>Gold script</h3><p class="small">The main logo. Website header, menu covers, signage, merch. Best on Brick or dark backgrounds where the gold glows.</p></div>
+    <div><h3>S monogram</h3><p class="small">Small spaces: the browser icon, social avatars, stamps, napkins, the top of a menu page, cup sleeves.</p></div>
+    <div><h3>Heritage badge</h3><p class="small">The illustrated portrait of Sheri on the building sign. Use for "our story" moments and nostalgia pieces, not as the main logo.</p></div>
+  </div>
+  <div class="stripe bot"></div>
+</section>
+
+<!-- 4. LOGO RULES -->
+<section class="page">
+  <div class="stripe top"></div>
+  <div class="pg-head"><img src="../images/logo.webp" alt=""><span class="num">03 · USING THE LOGO</span></div>
+  <h2 class="title">Give it room to breathe</h2>
+  <p class="lede">Keep clear space around the logo equal to the height of the heart. Nothing (text, edges, photos) should cross into that zone.</p>
+
+  <div class="grid2" style="margin-top:0.3in; grid-template-columns: 1fr 1fr;">
+    <div class="clear">
+      <div class="box">
+        <span class="x" style="top:4px;left:50%;transform:translateX(-50%)">♥</span>
+        <span class="x" style="bottom:4px;left:50%;transform:translateX(-50%)">♥</span>
+        <span class="x" style="left:8px;top:50%;transform:translateY(-50%)">♥</span>
+        <span class="x" style="right:8px;top:50%;transform:translateY(-50%)">♥</span>
+        <img src="../images/logo.webp" alt="">
+      </div>
+    </div>
+    <div>
+      <h3>Minimum sizes</h3>
+      <table class="specs" style="width:100%;border-collapse:collapse;font-size:9.5pt">
+        <tr><td style="padding:6px 10px 6px 0;border-bottom:1px solid var(--linen);font-weight:800;color:var(--hearth);white-space:nowrap">Gold script</td><td style="padding:6px 0;border-bottom:1px solid var(--linen)">1.25 in wide in print<br>120 px wide on screen</td></tr>
+        <tr><td style="padding:6px 10px 6px 0;border-bottom:1px solid var(--linen);font-weight:800;color:var(--hearth);white-space:nowrap">S monogram</td><td style="padding:6px 0;border-bottom:1px solid var(--linen)">0.35 in in print<br>16 px on screen</td></tr>
+      </table>
+      <h3 style="margin-top:0.25in">Backgrounds</h3>
+      <p class="small">Best: Brick, Hearth or the brick gradient. Good: Cream or Paper. Avoid busy photos unless they're faded way back (12% or less), like the storefront behind the website header.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+  <h3>Please don't</h3>
+  <div class="donts">
+    <div class="dont"><div class="t"><img src="../images/logo.webp" alt="" style="transform:scaleX(1.5)"></div><p>Stretch or squash it</p></div>
+    <div class="dont"><div class="t"><img src="../images/logo.webp" alt="" style="filter:hue-rotate(160deg)"></div><p>Recolor it</p></div>
+    <div class="dont"><div class="t"><img src="../images/logo.webp" alt="" style="transform:rotate(-14deg)"></div><p>Tilt or rotate it</p></div>
+    <div class="dont"><div class="t" style="background:url('../images/storefront.webp') center/cover"><img src="../images/logo.webp" alt=""></div><p>Drop it on a busy photo</p></div>
+    <div class="dont"><div class="t"><img src="../images/logo.webp" alt="" style="filter:drop-shadow(6px 6px 0 #00f) blur(.4px)"></div><p>Add new effects</p></div>
+    <div class="dont"><div class="t" style="background:var(--gold)"><img src="../images/logo.webp" alt=""></div><p>Put gold on gold</p></div>
+    <div class="dont"><div class="t"><img src="../images/logo.webp" alt="" style="opacity:.35"></div><p>Fade it out</p></div>
+    <div class="dont"><div class="t"><span style="font:800 10pt Nunito;color:var(--brick)">SHERI'S <img src="../images/logo.webp" alt="" style="width:.7in;vertical-align:middle"> PLACE</span></div><p>Crowd it with text</p></div>
+  </div>
+  <div class="stripe bot"></div>
+</section>
+
+<!-- 5. COLOR -->
+<section class="page">
+  <div class="stripe top"></div>
+  <div class="pg-head"><img src="../images/logo.webp" alt=""><span class="num">04 · COLOR</span></div>
+  <h2 class="title">Brick, gold and cream</h2>
+  <p class="lede">Pulled from the building, the logo and the dining room. Lean on Cream and Brick for most of a layout; use Gold for the one thing you want people to tap or notice.</p>
+  <hr class="rule" style="margin:0.22in 0">
+
+  <h3 style="margin-bottom:10px">Core colors</h3>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#7A1C14;color:#fff">Brick</div><div class="meta"><b>#7A1C14</b><br>RGB 122 28 20 · CMYK 0 77 84 52<i>Headings, primary buttons, top bar</i></div></div>
+    <div class="sw"><div class="chip" style="background:#4A0F0A;color:#fff">Hearth</div><div class="meta"><b>#4A0F0A</b><br>RGB 74 15 10 · CMYK 0 80 86 71<i>Footer, deep backgrounds, dark text on gold</i></div></div>
+    <div class="sw"><div class="chip" style="background:#C8261B;color:#fff">Chili Red</div><div class="meta"><b>#C8261B</b><br>RGB 200 38 27 · CMYK 0 81 87 22<i>Accents, links, the candy stripe</i></div></div>
+    <div class="sw"><div class="chip" style="background:#F4B324;color:#4A0F0A">Marquee Gold</div><div class="meta"><b>#F4B324</b><br>RGB 244 179 36 · CMYK 0 27 85 4<i>Main call-to-action, specials, stars</i></div></div>
+    <div class="sw"><div class="chip" style="background:#FCCA4B;color:#4A0F0A">Logo Yellow</div><div class="meta"><b>#FCCA4B</b><br>RGB 252 202 75 · CMYK 0 20 70 1<i>The S monogram's fill</i></div></div>
+    <div class="sw"><div class="chip" style="background:#FBF4E8;color:#7A1C14;border-bottom:1px solid var(--linen)">Cream</div><div class="meta"><b>#FBF4E8</b><br>RGB 251 244 232 · CMYK 0 3 8 2<i>Page background, menu paper</i></div></div>
+  </div>
+
+  <h3 style="margin:0.25in 0 10px">Supporting colors</h3>
+  <div class="support">
+    <div class="sw"><div class="chip" style="background:#FFE7A8;color:#4A0F0A">Butter</div><div class="meta"><b>#FFE7A8</b><br>0 9 34 0</div></div>
+    <div class="sw"><div class="chip" style="background:#FDEBD0;color:#4A0F0A">Peach</div><div class="meta"><b>#FDEBD0</b><br>0 7 18 1</div></div>
+    <div class="sw"><div class="chip" style="background:#FFFAF1;color:#7A1C14">Paper</div><div class="meta"><b>#FFFAF1</b><br>0 2 5 0</div></div>
+    <div class="sw"><div class="chip" style="background:#EAD9BF;color:#4A0F0A">Linen</div><div class="meta"><b>#EAD9BF</b><br>0 7 18 8</div></div>
+    <div class="sw"><div class="chip" style="background:#2B1A14;color:#fff">Espresso</div><div class="meta"><b>#2B1A14</b><br>0 40 53 83</div></div>
+    <div class="sw"><div class="chip" style="background:#6F5A4E;color:#fff">Walnut</div><div class="meta"><b>#6F5A4E</b><br>0 19 30 56</div></div>
+  </div>
+  <p class="small" style="margin-top:8px">Butter: highlights and soft labels · Peach: notes and today's-row highlights · Paper: cards · Linen: borders and dividers · Espresso: body text · Walnut: secondary text.</p>
+
+  <h3 style="margin:0.2in 0 10px">Signature gradients</h3>
+  <div class="grads">
+    <div class="grad" style="background:linear-gradient(90deg,#6E1B11,#5A140D 45%,#360A06)">Brick glow · #6E1B11 → #5A140D → #360A06</div>
+    <div class="grad" style="background:linear-gradient(90deg,#F5D132,#F18A00);color:#4A0F0A">Logo gold · #F5D132 → #F18A00</div>
+  </div>
+  <p class="small" style="margin-top:10px">CMYK values are straight conversions. Ask the printer for a proof before a big run, since reds and golds shift on different paper stocks.</p>
+  <div class="stripe bot"></div>
+</section>
+
+<!-- 6. TYPE -->
+<section class="page">
+  <div class="stripe top"></div>
+  <div class="pg-head"><img src="../images/logo.webp" alt=""><span class="num">05 · TYPE</span></div>
+  <h2 class="title">Two typefaces, that's it</h2>
+  <p class="lede">A soft, old-fashioned serif for headlines and a round, friendly sans for everything else. Both are free from Google Fonts.</p>
+
+  <div class="grid2" style="margin-top:0.3in">
+    <div class="font-card" style="background:var(--brick);color:#fff">
+      <div style="font:800 8.5pt Nunito;letter-spacing:.06em;opacity:.8">HEADLINES</div>
+      <div class="big" style="font-family:Fraunces;font-weight:800;color:var(--butter)">Fraunces</div>
+      <div class="alpha" style="color:#f3dccb;font-family:Fraunces">Aa Bb Cc Dd Ee Ff Gg 0123456789 &amp;</div>
+      <p class="small" style="color:#f3dccb;margin-top:8px">Semibold 600 and ExtraBold 800. Menu section names, page titles, the big numbers on date tiles.</p>
+    </div>
+    <div class="font-card" style="background:var(--paper);border:1px solid var(--linen)">
+      <div style="font:800 8.5pt Nunito;letter-spacing:.06em;color:var(--walnut)">EVERYTHING ELSE</div>
+      <div class="big" style="font-family:Nunito;font-weight:800;color:var(--brick)">Nunito</div>
+      <div class="alpha" style="font-family:Nunito">Aa Bb Cc Dd Ee Ff Gg 0123456789 &amp;</div>
+      <p class="small" style="margin-top:8px">Regular 400 to ExtraBold 800. Dish names, descriptions, buttons, prices, small print.</p>
+    </div>
+  </div>
+
+  <h3 style="margin:0.3in 0 4px">Hierarchy</h3>
+  <div class="type-spec"><div class="lbl">PAGE TITLE<span>Fraunces 800</span></div><div style="font:800 30pt Fraunces;color:var(--brick)">Our Menu</div></div>
+  <div class="type-spec"><div class="lbl">SECTION<span>Fraunces 800</span></div><div style="font:800 20pt Fraunces;color:var(--hearth)">South of the Border</div></div>
+  <div class="type-spec"><div class="lbl">TAGLINE<span>Fraunces 600</span></div><div style="font:600 16pt Fraunces;color:#B8860B">A family restaurant on Main Street</div></div>
+  <div class="type-spec"><div class="lbl">DISH NAME<span>Nunito 800</span></div><div style="font:800 13pt Nunito">Sweet Chili Chicken Tacos</div></div>
+  <div class="type-spec"><div class="lbl">DESCRIPTION<span>Nunito 400</span></div><div style="font:400 11pt Nunito;color:var(--walnut)">3 soft shell tortillas, cheddar and grilled chicken topped with Sheri's famous coleslaw and sweet chili sauce</div></div>
+  <div class="type-spec"><div class="lbl">BUTTON<span>Nunito 800</span></div><div><span class="btn b-brick">Call to order takeout</span></div></div>
+  <div class="type-spec" style="border:0"><div class="lbl">SMALL PRINT<span>Nunito 400</span></div><div style="font:400 9pt Nunito;color:var(--walnut)">Consuming raw or undercooked meats, poultry, seafood, shellfish or eggs may increase your risk of foodborne illness.</div></div>
+  <div class="stripe bot"></div>
+</section>
+
+<!-- 7. ELEMENTS -->
+<section class="page">
+  <div class="stripe top"></div>
+  <div class="pg-head"><img src="../images/logo.webp" alt=""><span class="num">06 · ELEMENTS</span></div>
+  <h2 class="title">The building blocks</h2>
+  <p class="lede">The pieces the website is made of. Reuse them in print, social posts and signage so everything feels like one place.</p>
+  <hr class="rule" style="margin:0.22in 0">
+
+  <div class="grid2" style="gap:0.35in">
+    <div>
+      <div class="el"><div class="name">BUTTONS · 12 PX CORNERS</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><span class="btn b-gold">Call</span><span class="btn b-white">Get Directions</span><span class="btn b-brick">Count me in</span><span class="btn b-outline">Starters →</span></div>
+        <p class="small" style="margin-top:8px">Gold = the #1 action on screen (only one). Brick = confirm. White or outline = secondary.</p>
+      </div>
+      <div class="el"><div class="name">TABS / PILLS</div>
+        <div class="chips"><span class="chipx sp">Today's Specials</span><span class="chipx on">Burgers</span><span class="chipx">Salads</span><span class="chipx">Beverages</span></div>
+      </div>
+      <div class="el"><div class="name">EVENT DATE TILE</div>
+        <span class="date-tile"><span class="mo">OCT</span><span class="dy">17</span><span class="wd">SAT</span></span>
+        <span class="date-tile" style="margin-left:8px"><span class="mo">OCT</span><span class="dy">31</span><span class="wd">SAT</span></span>
+        <span style="display:inline-block;vertical-align:middle;margin-left:12px"><b style="font:800 12pt Fraunces;color:var(--hearth)">Karaoke &amp; Costume Party</b><br><span class="small">With DJ Shirl · 7 – 10 PM</span></span>
+      </div>
+      <div class="el"><div class="name">RATING</div>
+        <span class="stars">★★★★<span style="background:linear-gradient(90deg,var(--gold) 50%,var(--linen) 50%);-webkit-background-clip:text;background-clip:text;color:transparent">★</span></span>
+        <b style="margin-left:8px">4.5 on Google · 205 reviews</b>
+        <p class="small" style="margin-top:4px">Stars always match the real rating, half stars included.</p>
+      </div>
+    </div>
+    <div>
+      <div class="el"><div class="name">FEATURE CARD · GOLD BORDER</div>
+        <div class="sp-card"><h4>Today's Specials</h4><div>Creamy Chicken &amp; Veggie Soup</div><div>Beef Stew <span style="font-weight:400;color:var(--walnut)">· with garlic bread</span></div><div>Homemade Apple Pie</div></div>
+      </div>
+      <div class="el"><div class="name">NOTE / CALLOUT</div>
+        <div class="note">All burgers come with our hand cut fries, lettuce, tomato and onion.</div>
+      </div>
+      <div class="el"><div class="name">CANDY STRIPE (FROM THE CURRENT MENU)</div>
+        <div class="stripe-demo"></div>
+        <p class="small" style="margin-top:6px">Chili Red diagonal stripes at 45°. Top and bottom edges of menus, receipts, boxes, and this guide.</p>
+      </div>
+      <div class="el"><div class="name">DIVIDERS</div>
+        <div style="border-top:2px dashed var(--linen)"></div>
+        <p class="small" style="margin-top:6px">Dashed Linen under section titles; thin solid Linen between items.</p>
+      </div>
+      <div class="el"><div class="name">CORNERS &amp; SHADOWS</div>
+        <p class="small">Cards 14–18 px corners · Buttons 12 px · Pills fully round. Shadows are soft and warm (brown-tinted), never gray or hard.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stripe bot"></div>
+</section>
+
+<!-- 8. MENU STARTER -->
+<section class="page">
+  <div class="stripe top"></div>
+  <div class="pg-head"><img src="../images/logo.webp" alt=""><span class="num">07 · MENU REDESIGN STARTER</span></div>
+  <h2 class="title">Making the menu sing</h2>
+  <p class="lede">The current menu already has good bones: the candy-stripe border and clear sections. Here's the brand applied to the real Burgers page.</p>
+
+  <div class="menu-wrap" style="margin-top:0.22in">
+    <div class="mock">
+      <img class="s" src="../images/s-mark.webp" alt="">
+      <h4>Burgers</h4>
+      <div class="tag">Served with hand cut fries, lettuce, tomato and onion</div>
+      <div class="mi"><span><b>Classic</b><span class="lead"></span></span><span class="pr">12</span></div>
+      <div class="mi"><span><b>Classic Cheese</b><span class="lead"></span></span><span class="pr">13</span><i>Your choice of American, Swiss or cheddar</i></div>
+      <div class="mi"><span><b>Philly Cheeseburger Sub</b><span class="lead"></span></span><span class="pr">15</span><i>Ground beef sautéed with onions, peppers and American cheese</i></div>
+      <div class="mi"><span><b>Texan</b><span class="lead"></span></span><span class="pr">15</span><i>Melted cheddar, bacon and BBQ sauce</i></div>
+      <div class="mi"><span><b>802</b><span class="lead"></span></span><span class="pr">15</span><i>Cheddar and maple caramelized bacon</i></div>
+      <div class="mi"><span><b>Mushroom Swiss</b><span class="lead"></span></span><span class="pr">15</span><i>Sautéed mushrooms and Swiss cheese</i></div>
+      <div class="mi"><span><b>Genius</b><span class="lead"></span></span><span class="pr">15</span><i>Cheddar, sweet chili sauce and jalapeños</i></div>
+      <div class="mi"><span><b>Au Jus</b><span class="lead"></span></span><span class="pr">15</span><i>Sautéed onions, Swiss and au jus for dipping</i></div>
+      <div class="mi"><span><b>Veggie</b><span class="lead"></span></span><span class="pr">16</span><i>Make any of our signature burgers with a veggie patty</i></div>
+      <div class="mnote">Substitute sweet potato fries or onion rings +3</div>
+    </div>
+
+    <div class="specs">
+      <h3>Print specs</h3>
+      <table>
+        <tr><td>Size</td><td>8.5 × 11 in (matches the current menu sleeves)</td></tr>
+        <tr><td>Bleed / safe</td><td>0.125 in bleed · keep text 0.375 in from the trim</td></tr>
+        <tr><td>Color</td><td>CMYK from page 04 · ask for a proof</td></tr>
+        <tr><td>Paper</td><td>Cream or natural white stock, matte or satin (less glare in the menu sleeves)</td></tr>
+        <tr><td>Section titles</td><td>Fraunces 800 · 28–36 pt · Brick</td></tr>
+        <tr><td>Dish names</td><td>Nunito 800 · 11–12 pt · caps OK</td></tr>
+        <tr><td>Descriptions</td><td>Nunito 400 · 9–10 pt · Walnut</td></tr>
+        <tr><td>Prices</td><td>Nunito 800 · Brick · no $ sign, dotted leaders</td></tr>
+      </table>
+
+      <h3 style="margin-top:0.25in">Ideas to make it sick</h3>
+      <ul class="ideas" style="padding-left:18px;margin:0">
+        <li>Front cover: gold script logo on the brick gradient with the storefront faded in behind it, just like the website.</li>
+        <li>Give "Sheri's famous" items and house favorites a small gold S monogram, and repeat that S on the website.</li>
+        <li>Back page: hours, events and a QR code to the website and email list.</li>
+        <li>Put a real photo of Sheri on the beverages page with a one-line "since 2010" story.</li>
+        <li>Get the logo redrawn as vector art (SVG/PDF). The current files are images and will go soft past about 6 in wide.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stripe bot"></div>
+</section>
+
+</body>
+</html>

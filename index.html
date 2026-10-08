@@ -199,16 +199,16 @@
   .menu-track {
     display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden;
     scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
-    margin: 0 calc(-1 * var(--gutter));
+    margin: 0 calc(-1 * var(--gutter)); transition: height .3s ease;
   }
   .menu-track::-webkit-scrollbar { display: none; }
   .menu-cat { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; padding: 18px var(--gutter) 4px; }
-  .menu-pager { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin-top: 14px; }
+  .menu-pager { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; margin-top: 14px; }
   #nextBtn { justify-self: end; }
   .pager-btn {
     display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
     border-radius: 12px; border: 2px solid var(--line); background: var(--paper); color: var(--brick);
-    font: 800 .92rem/1.2 "Nunito", sans-serif; cursor: pointer; text-align: left; justify-self: start;
+    font: 800 .92rem/1.2 "Nunito", sans-serif; cursor: pointer; text-align: left; justify-self: start; max-width: 100%; padding-top: 6px; padding-bottom: 6px;
   }
   .pager-btn[hidden] { display: inline-flex; visibility: hidden; }
   .dots { display: flex; justify-content: center; gap: 6px; }
@@ -223,8 +223,11 @@
   .item:last-child { border-bottom: 0; }
   .item h4 { margin: 0; font-size: 1.08rem; font-weight: 800; }
   .item p { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: .95rem; }
-  .tag { display: inline-block; font-size: .7rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; margin-left: 6px; vertical-align: 2px; background: #ffe2dc; color: var(--red); }
-  .tag.fav { background: var(--gold-soft); color: #7a4a00; }
+  .subhead {
+    margin: 18px 0 2px; padding-top: 14px; border-top: 2px dashed var(--line);
+    font: 800 1.1rem "Fraunces", Georgia, serif; color: var(--brick-dark); break-after: avoid; column-span: all;
+  }
+  .cat-note { margin: 12px 0 0; padding: 12px 14px; border-radius: 12px; background: #fdebd0; color: var(--brick-dark); font-weight: 700; font-size: .92rem; }
 
   /* ---------- About ---------- */
   .about { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -484,7 +487,7 @@
         <button class="pager-btn" id="nextBtn" type="button"><span id="nextLbl"></span><span aria-hidden="true">&rarr;</span></button>
       </div>
 
-      <p class="menu-note" style="margin-top:22px">Menu items may change. Have an allergy? Just let your server know — we're happy to help.</p>
+      <p class="menu-note" style="margin-top:22px">Menu items may change. Have an allergy? Just let your server know — we're happy to help. Consuming raw or undercooked meats, poultry, seafood, shellfish or eggs may increase your risk of foodborne illness, especially if you have certain medical conditions.</p>
       <div style="margin-top:16px"><a class="btn btn-brick" href="tel:+18028854240"><svg><use href="#i-phone"/></svg>Call to order takeout</a></div>
     </div>
   </section>
@@ -496,7 +499,7 @@
       <div>
         <h2>Pull up a chair — you're family here.</h2>
         <span class="badge-2010">Since 2010</span>
-        <p>Sheri opened her doors on Main Street in 2010 with a simple idea: good food, good friends, and a place that feels like home. More than a decade later, that hasn't changed.</p>
+        <p>Sheri opened the doors on Main Street in 2010 with a simple idea: good food, good friends, and a place that feels like home. More than a decade later, that hasn't changed.</p>
         <p>Come in from the cold, grab a seat by the fireplace, and bring the whole crew — kids included. Whether it's burgers and wings or a sizzling Tex-Mex plate, we'll treat you like a regular from your very first visit.</p>
         <div class="perks">
           <div class="perk"><svg class="pi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s5 4.5 5 10a5 5 0 0 1-10 0c0-2.2 1-3.8 2-5 0 2 1 3 2 3 0-3 1-6 1-8z"/></svg><span>Cozy fireplace</span></div>
@@ -680,40 +683,74 @@ const SPECIALS = [
 ];
 
 /* =====================================================================
-   EDIT MENU HERE.
-   TODO: replace with Sheri's real menu — these are placeholders.
-   tags: "fav" = house favorite, "spicy" = spicy
+   EDIT MENU HERE. (From the printed menu, October 2026. No prices on the site.)
+   n = name, d = description (optional).  "note" prints under a section.
    ===================================================================== */
+const SIDES_SWAP = "Swap in sweet potato fries or onion rings.";
 const MENU = [
   { name: "Today's Specials", special: true, d: "These change often — check back to see what's new.", items: SPECIALS },
-  { name: "Starters", items: [
-    { n: "Wings", d: "A dozen, tossed in buffalo, BBQ, or garlic parm. Celery & blue cheese.", t: ["fav"] },
-    { n: "Loaded Nachos", d: "Tortilla chips piled with cheese, jalapeños, pico, sour cream & guac." },
-    { n: "Mozzarella Sticks", d: "Golden fried with marinara." },
-    { n: "Jalapeño Poppers", d: "Cream cheese stuffed, ranch on the side.", t: ["spicy"] },
+  { name: "Appetizers", items: [
+    { n: "Soup of the Day" },
+    { n: "Hand Cut Fries" },
+    { n: "Shoestring Fries" },
+    { n: "Sweet Potato Fries" },
+    { n: "Fried Pickles", d: "Served with ranch" },
+    { n: "Basket of Onion Rings" },
+    { n: "Mozzarella Sticks", d: "Hand cut and battered, served with our homemade marinara sauce" },
+    { n: "Deep Fried Mushroom Caps", d: "Served with ranch" },
+    { n: "Cheesy Garlic Bread", d: "Served with our homemade marinara sauce" },
+    { n: "Big & Loaded Nachos", d: "A mountain of nachos topped with cheese, seasoned ground beef, rice, beans, lettuce, pico de gallo, salsa and sour cream" },
+    { n: "Chicken Wings", d: "8 jumbo wings with your choice of ranch or blue cheese. Buffalo, BBQ, General Tso or Teriyaki Garlic" },
   ]},
-  { name: "Burgers & Sandwiches", d: "Served with fries. Swap for onion rings or a side salad.", items: [
-    { n: "Sheri's Classic Burger", d: "Half-pound, lettuce, tomato, onion, choice of cheese.", t: ["fav"] },
-    { n: "Bacon BBQ Burger", d: "Cheddar, crispy bacon, onion rings, BBQ sauce." },
-    { n: "Grilled Chicken Club", d: "Bacon, Swiss, lettuce, tomato, mayo on toasted sourdough." },
-    { n: "Philly Cheesesteak", d: "Shaved steak, peppers, onions, melted provolone." },
+  { name: "Salads", items: [
+    { n: "Crispy BBQ Salad", d: "Crispy chicken rolled in BBQ sauce on a bed of fresh romaine with cheddar, tomato, onion and cucumber, topped with bacon and ranch dressing" },
+    { n: "Buffalo Chicken Salad", d: "Grilled chicken breast tossed in buffalo sauce on a bed of fresh romaine with shredded cheddar, tomato, onion and cucumber" },
+    { n: "Taco Salad", d: "Romaine, cheese, rice, black beans and pico de gallo. Your choice of chicken, ground beef or veggie" },
+    { n: "Caesar Salad", d: "Romaine, freshly grated parmesan and croutons" },
+    { n: "Garden Salad", d: "Romaine, tomato, cucumber, onion and carrots" },
+    { n: "Half Garden or Half Caesar Salad" },
+  ], note: "Add chicken to any salad. Dressings: Ranch, Blue Cheese, Honey Mustard, Italian, Balsamic Vinaigrette." },
+  { name: "Burgers", items: [
+    { n: "Classic" },
+    { n: "Classic Cheese", d: "Your choice of American, Swiss or cheddar" },
+    { n: "Philly Cheeseburger Sub", d: "Ground beef sautéed with onions, peppers and American cheese" },
+    { n: "Texan", d: "Melted cheddar, bacon and BBQ sauce" },
+    { n: "802", d: "Cheddar and maple caramelized bacon" },
+    { n: "Mushroom Swiss", d: "Sautéed mushrooms and Swiss cheese" },
+    { n: "Genius", d: "Cheddar, sweet chili sauce and jalapeños" },
+    { n: "Au Jus", d: "Sautéed onions, Swiss and au jus for dipping" },
+    { n: "Veggie", d: "Make any of our signature burgers with a veggie patty" },
+  ], note: "All burgers come with our hand cut fries, lettuce, tomato and onion. " + SIDES_SWAP },
+  { name: "Pub Favorites", items: [
+    { n: "Chicken Finger Basket", d: "Served with your favorite dipping sauce" },
+    { n: "Southwest Crispy Chicken Sandwich", d: "Swiss cheese, pickles and southwest sauce" },
+    { n: "Crispy Chicken Deluxe Sandwich", d: "Swiss cheese, bacon, lettuce, tomato and onion" },
+    { n: "General Tso Crispy Chicken Sandwich", d: "General Tso sauce and sautéed onions" },
+    { n: "Crispy Honey Mustard Chicken Wrap", d: "Cheddar, lettuce, tomato, onion and honey mustard" },
+    { n: "Grilled Chicken Caesar Wrap", d: "Romaine and Caesar dressing" },
+    { n: "Crispy Chicken Bacon Cheddar Wrap", d: "Tomato, lettuce and mayo" },
+    { n: "BLT Wrap", d: "Bacon, lettuce, tomato and mayo" },
+  ], note: "All pub favorites come with our hand cut fries. " + SIDES_SWAP },
+  { name: "South of the Border", items: [
+    { n: "Chicken, Beef or Veggie Burrito", d: "Stuffed with rice, black beans, cheese, lettuce and pico de gallo" },
+    { n: "BBQ Quesadilla", d: "BBQ chicken, bacon and ranch" },
+    { n: "Mexi Quesadilla", d: "Seasoned ground beef, cheddar, lettuce and pico de gallo" },
+    { n: "Buffalo Chicken Quesadilla" },
+    { n: "Chicken & Veggie", d: "Grilled chicken, sautéed onions and peppers" },
+    { n: "Veggie Quesadilla", d: "Sautéed onion, peppers, mushrooms and tomato" },
+    { n: "Cheese Quesadilla" },
+    { n: "Sweet Chili Chicken Tacos", d: "3 soft shell tortillas, cheddar and grilled chicken topped with Sheri's famous coleslaw and sweet chili sauce" },
+    { n: "Ground Beef or Chicken Tacos", d: "3 soft shell tortillas, cheddar, lettuce and pico de gallo" },
+    { h: "Salsa & Chips To Go" },
+    { n: "Small Salsa", d: "8 oz" },
+    { n: "Large Salsa", d: "16 oz. Add a bag of tortilla chips" },
   ]},
-  { name: "Tex-Mex", items: [
-    { n: "Sizzling Fajitas", d: "Chicken or steak with peppers & onions, warm tortillas and all the fixings.", t: ["fav"] },
-    { n: "Chicken Quesadilla", d: "Grilled flour tortilla, cheese, peppers, salsa & sour cream." },
-    { n: "Beef Burrito", d: "Seasoned beef, rice, beans, cheese, smothered in red sauce.", t: ["spicy"] },
-    { n: "Taco Plate", d: "Three tacos, your choice of beef, chicken, or fish. Rice & beans." },
-  ]},
-  { name: "Comfort Plates", items: [
-    { n: "Fish & Chips", d: "Beer-battered haddock, fries, coleslaw, tartar." },
-    { n: "Chicken Tender Dinner", d: "Hand-breaded tenders, fries, honey mustard." },
-    { n: "Mac & Cheese", d: "Baked and bubbly. Add chicken or bacon." },
-  ]},
-  { name: "Kids", d: "For our guests 12 & under. Comes with a drink.", items: [
-    { n: "Chicken Tenders & Fries" },
-    { n: "Kids' Cheeseburger" },
-    { n: "Grilled Cheese" },
-    { n: "Mini Quesadilla" },
+  { name: "Beverages", items: [
+    { n: "Soft Drinks", d: "Pepsi, Diet Pepsi, Root Beer, Ginger Ale, Seltzer, Tonic" },
+    { n: "Lemonade & Iced Tea", d: "Lemonade, freshly brewed iced tea" },
+    { n: "Flavored Lemonade or Iced Tea", d: "Strawberry, raspberry or mango" },
+    { n: "Mocktails", d: "Shirley Temple, Roy Rogers, Arnold Palmer" },
+    { n: "Milk & Hot Drinks", d: "White milk, chocolate milk, hot chocolate, hot tea, coffee" },
   ]},
 ];
 
@@ -730,13 +767,12 @@ $("#menuList").innerHTML = MENU.map((c) => `
   <div class="menu-cat${c.special ? " special" : ""}" id="${slug(c.name)}" role="tabpanel"><div class="cat-inner${c.special ? " special-card" : ""}">
     <h3>${esc(c.name)}</h3>
     ${c.d ? `<p>${esc(c.d)}</p>` : ""}
-    <div class="items">${c.items.map((it) => `
+    <div class="items">${c.items.map((it) => it.h ? `<h5 class="subhead">${esc(it.h)}</h5>` : `
       <div class="item">
-        <h4>${esc(it.n)}${(it.t || []).map((t) => t === "fav"
-          ? '<span class="tag fav">House favorite</span>'
-          : '<span class="tag">Spicy</span>').join("")}</h4>
+        <h4>${esc(it.n)}</h4>
         ${it.d ? `<p>${esc(it.d)}</p>` : ""}
       </div>`).join("")}</div>
+    ${c.note ? `<p class="cat-note">${esc(c.note)}</p>` : ""}
   </div></div>`).join("");
 
 // Menu carousel
@@ -746,15 +782,17 @@ const chips = [...document.querySelectorAll(".chip")];
 const dots = [...document.querySelectorAll("#dots i")];
 let current = -1;
 
-// One steady height for every section (the tallest one), so the page never jumps while swiping
-function fitHeight() {
-  track.style.height = "auto";
-  track.style.height = Math.max(...panels.map((p) => p.offsetHeight)) + "px";
-}
+// The menu fits the section being shown. It only resizes once a swipe has settled (never mid-swipe).
+function fitHeight() { track.style.height = panels[current].offsetHeight + "px"; }
 
 function setActive(i) {
   if (i === current) return;
+  const first = current === -1;
   current = i;
+  fitHeight();
+  // if they'd scrolled down into a long section, bring the new section's top into view
+  const chipsTop = $("#chips").getBoundingClientRect().top;
+  if (!first && chipsTop < 60) window.scrollBy({ top: chipsTop - 70, behavior: "smooth" });
   chips.forEach((ch, j) => {
     ch.classList.toggle("active", j === i);
     ch.setAttribute("aria-selected", j === i);
@@ -793,7 +831,6 @@ window.addEventListener("resize", () => {
   track.scrollTo({ left: current * track.clientWidth });
 });
 setActive(0);
-fitHeight();
 document.fonts?.ready.then(fitHeight);
 
 // Directions: send iPhone/iPad/Mac users to Apple Maps, everyone else to Google Maps

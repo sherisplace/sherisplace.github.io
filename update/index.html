@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Sheri's Specials</title>
+<meta name="theme-color" content="#7A1C14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Specials">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brick: #7A1C14; --hearth: #4A0F0A; --gold: #F4B324; --cream: #FBF4E8; --paper: #FFFAF1;
+    --ink: #2B1A14; --walnut: #6F5A4E; --linen: #EAD9BF; --green: #2F7D3A;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background: var(--cream); color: var(--ink); font: 400 19px/1.45 "Nunito", system-ui, sans-serif;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    -webkit-tap-highlight-color: transparent;
+  }
+  header { background: linear-gradient(180deg, #6E1B11, #4A0F0A); padding: 22px 16px 26px; text-align: center; }
+  header img { width: 210px; max-width: 70%; display: block; margin: 0 auto; filter: drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+  main { max-width: 520px; margin: 0 auto; padding: 24px 18px 40px; }
+  h1 { font: 800 1.9rem/1.15 "Fraunces", Georgia, serif; color: var(--brick); margin: 0 0 8px; text-align: center; }
+  .lead { text-align: center; color: var(--walnut); margin: 0 0 24px; font-size: 1.1rem; }
+  [hidden] { display: none !important; }
+
+  .big {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%;
+    min-height: 190px; border-radius: 26px; border: 0; cursor: pointer; text-align: center;
+    background: var(--gold); color: var(--hearth); box-shadow: 0 6px 0 #c98a0a;
+    font: 800 1.6rem/1.2 "Nunito", sans-serif;
+  }
+  .big svg { width: 64px; height: 64px; }
+  .big:active { transform: translateY(3px); box-shadow: 0 3px 0 #c98a0a; }
+  .btn {
+    display: flex; align-items: center; justify-content: center; width: 100%; min-height: 66px; border-radius: 18px;
+    border: 0; cursor: pointer; font: 800 1.3rem "Nunito", sans-serif; text-decoration: none; margin-top: 14px;
+  }
+  .btn-go { background: var(--green); color: #fff; box-shadow: 0 5px 0 #1f5a27; }
+  .btn-plain { background: var(--paper); color: var(--brick); border: 2px solid var(--linen); }
+  .btn:disabled { opacity: .6; }
+
+  .photo { width: 100%; border-radius: 16px; display: block; margin-bottom: 18px; max-height: 260px; object-fit: cover; }
+  .card { background: var(--paper); border: 2px solid var(--gold); border-radius: 20px; padding: 6px 20px; }
+  .card ol { margin: 0; padding: 0; list-style: none; }
+  .card li { padding: 14px 0; border-bottom: 1px solid var(--linen); font-weight: 800; font-size: 1.2rem; }
+  .card li:last-child { border-bottom: 0; }
+  .card li small { display: block; font-weight: 400; color: var(--walnut); font-size: 1rem; }
+  .ask { text-align: center; font-weight: 800; font-size: 1.25rem; margin: 22px 0 0; }
+
+  .spinner { width: 70px; height: 70px; margin: 30px auto 18px; border-radius: 50%; border: 8px solid var(--linen); border-top-color: var(--brick); animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .center { text-align: center; }
+  .check { width: 110px; height: 110px; border-radius: 50%; margin: 10px auto 18px; display: grid; place-items: center; background: var(--green); color: #fff; }
+  .check svg { width: 64px; height: 64px; }
+  .oops { background: #FBE6E2; border: 2px solid #F0C4BC; border-radius: 18px; padding: 18px; text-align: center; font-weight: 700; margin-bottom: 8px; }
+
+  input.pin {
+    width: 100%; font: 800 2.2rem "Nunito", sans-serif; text-align: center; letter-spacing: .4em;
+    padding: 16px; border-radius: 18px; border: 3px solid var(--linen); background: #fff; color: var(--ink);
+  }
+  input.pin:focus { outline: none; border-color: var(--gold); }
+  .small { font-size: .9rem; color: var(--walnut); text-align: center; margin-top: 26px; }
+  .small button { background: none; border: 0; color: var(--walnut); text-decoration: underline; font: inherit; cursor: pointer; padding: 8px; }
+</style>
+</head>
+<body>
+<header><img src="../images/logo.webp" alt="Sheri's"></header>
+
+<main>
+  <!-- PIN (first time only) -->
+  <section id="s-pin" hidden>
+    <h1>Welcome!</h1>
+    <p class="lead">Type the PIN Matt gave you. You only do this once.</p>
+    <input class="pin" id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12" aria-label="PIN">
+    <p class="oops" id="pin-err" hidden style="margin-top:14px">That PIN didn't work. Try again.</p>
+    <button class="btn btn-go" id="pin-save" type="button">Continue</button>
+  </section>
+
+  <!-- 1. take the picture -->
+  <section id="s-home" hidden>
+    <h1>Today's Specials</h1>
+    <p class="lead">Take a picture of the specials board.<br>Get the whole board in the picture.</p>
+    <label class="big" for="cam">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+      Take a picture<br>of the board
+    </label>
+    <input id="cam" type="file" accept="image/*" capture="environment" hidden>
+  </section>
+
+  <!-- 2. reading -->
+  <section id="s-reading" hidden>
+    <img class="photo" id="thumb" alt="">
+    <div class="spinner" aria-hidden="true"></div>
+    <h1>Reading the board…</h1>
+    <p class="lead">This takes about 20 seconds.</p>
+  </section>
+
+  <!-- 3. check it -->
+  <section id="s-review" hidden>
+    <h1>Is this right?</h1>
+    <div class="card"><ol id="list"></ol></div>
+    <p class="ask">If it looks right, tap the green button.</p>
+    <button class="btn btn-go" id="post" type="button">Yes, put it on the website</button>
+    <button class="btn btn-plain" id="retake" type="button">No, take a new picture</button>
+  </section>
+
+  <!-- 4. posting -->
+  <section id="s-posting" hidden>
+    <div class="spinner" aria-hidden="true"></div>
+    <h1>Putting it on the website…</h1>
+  </section>
+
+  <!-- 5. done -->
+  <section id="s-done" hidden>
+    <div class="check"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+    <h1>All done!</h1>
+    <p class="lead">The website will show today's specials in about a minute.</p>
+    <a class="btn btn-plain" href="https://sherisplacevt.com/#menu" target="_blank" rel="noopener">See the website</a>
+    <button class="btn btn-plain" id="again" type="button">Start over</button>
+  </section>
+
+  <!-- problem -->
+  <section id="s-error" hidden>
+    <h1>Let's try again</h1>
+    <p class="oops" id="err-msg"></p>
+    <button class="btn btn-go" id="err-retry" type="button">Take a new picture</button>
+    <p class="small">Still stuck? Call or text Matt.</p>
+  </section>
+
+  <p class="small" id="footer" hidden><button type="button" id="forget">Change PIN</button></p>
+</main>
+
+<script>
+/* =====================================================================
+   SETUP: the Cloudflare Worker address (see specials-app/README.md).
+   ===================================================================== */
+const API_URL = "https://sheris-specials.sheris.workers.dev";
+
+const $ = (id) => document.getElementById(id);
+const screens = ["s-pin", "s-home", "s-reading", "s-review", "s-posting", "s-done", "s-error"];
+const show = (id) => { screens.forEach((s) => $(s).hidden = s !== id); $("footer").hidden = id !== "s-home"; window.scrollTo(0, 0); };
+const store = {
+  get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
+  set: (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
+};
+const DEMO = new URLSearchParams(location.search).has("demo"); // preview the screens without posting anything
+let items = [];
+
+function fail(message) { $("err-msg").textContent = message; show("s-error"); }
+
+async function call(path, body) {
+  if (DEMO) {
+    await new Promise((r) => setTimeout(r, path === "/read" ? 1500 : 800));
+    return path === "/read"
+      ? { items: [{ n: "Tomato Cheddar Soup" }, { n: "Lasagna" }, { n: "Fish Tacos" }, { n: "Homemade Apple Pie", d: "Dessert" }] }
+      : { ok: true };
+  }
+  if (!API_URL) throw new Error("This app isn't connected yet. Tell Matt.");
+  const res = await fetch(API_URL + path, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pin: store.get("pin"), ...body }),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (res.status === 401) { store.set("pin", null); show("s-pin"); $("pin-err").hidden = false; throw null; }
+  if (!res.ok) throw new Error(out.message || "Something went wrong. Please try again.");
+  return out;
+}
+
+// Shrink the phone photo (often 4000px+) so it uploads fast; Claude reads 1600px boards fine.
+function shrink(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      resolve(c.toDataURL("image/jpeg", 0.85));
+    };
+    img.onerror = () => reject(new Error("That picture couldn't be opened. Please try again."));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+$("cam").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  try {
+    const dataUrl = await shrink(file);
+    $("thumb").src = dataUrl;
+    show("s-reading");
+    const out = await call("/read", { image: dataUrl.split(",")[1], mediaType: "image/jpeg" });
+    items = out.items;
+    $("list").innerHTML = "";
+    for (const it of items) {
+      const li = document.createElement("li");
+      li.textContent = it.n;
+      if (it.d) { const s = document.createElement("small"); s.textContent = it.d; li.append(s); }
+      $("list").append(li);
+    }
+    show("s-review");
+  } catch (err) { if (err) fail(err.message); }
+});
+
+$("post").addEventListener("click", async () => {
+  show("s-posting");
+  try { await call("/publish", { items }); show("s-done"); }
+  catch (err) { if (err) fail(err.message); }
+});
+
+const restart = () => show("s-home");
+$("retake").addEventListener("click", () => $("cam").click());
+$("err-retry").addEventListener("click", () => { show("s-home"); $("cam").click(); });
+$("again").addEventListener("click", restart);
+$("forget").addEventListener("click", () => { store.set("pin", null); show("s-pin"); });
+$("pin-save").addEventListener("click", () => {
+  const v = $("pin").value.trim();
+  if (!v) return;
+  store.set("pin", v); $("pin").value = ""; $("pin-err").hidden = true; show("s-home");
+});
+$("pin").addEventListener("keydown", (e) => { if (e.key === "Enter") $("pin-save").click(); });
+
+show(store.get("pin") || DEMO ? "s-home" : "s-pin");
+if ("serviceWorker" in navigator && !DEMO) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>

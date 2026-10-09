@@ -48,6 +48,8 @@
   .btn-go { background: var(--green); color: #fff; box-shadow: 0 5px 0 #1f5a27; }
   .btn-plain { background: var(--paper); color: var(--brick); border: 2px solid var(--linen); }
   .btn:disabled { opacity: .6; }
+  .pick { margin-top: 18px; gap: 10px; cursor: pointer; }
+  .pick svg { width: 28px; height: 28px; flex: none; }
 
   .photo { width: 100%; border-radius: 16px; display: block; margin-bottom: 18px; max-height: 260px; object-fit: cover; }
   .card { background: var(--paper); border: 2px solid var(--gold); border-radius: 20px; padding: 6px 20px; }
@@ -89,12 +91,17 @@
   <!-- 1. take the picture -->
   <section id="s-home" hidden>
     <h1>Today's Specials</h1>
-    <p class="lead">Take a picture of the specials board.<br>Get the whole board in the picture.</p>
+    <p class="lead">Take a picture of the specials board,<br>or pick one you already took.</p>
     <label class="big" for="cam">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
       Take a picture<br>of the board
     </label>
     <input id="cam" type="file" accept="image/*" capture="environment" hidden>
+    <label class="btn btn-plain pick" for="lib">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+      Choose a photo instead
+    </label>
+    <input id="lib" type="file" accept="image/*" hidden>
   </section>
 
   <!-- 2. reading -->
@@ -111,7 +118,7 @@
     <div class="card"><ol id="list"></ol></div>
     <p class="ask">If it looks right, tap the green button.</p>
     <button class="btn btn-go" id="post" type="button">Yes, put it on the website</button>
-    <button class="btn btn-plain" id="retake" type="button">No, take a new picture</button>
+    <button class="btn btn-plain" id="retake" type="button">No, try a different picture</button>
   </section>
 
   <!-- 4. posting -->
@@ -133,7 +140,7 @@
   <section id="s-error" hidden>
     <h1>Let's try again</h1>
     <p class="oops" id="err-msg"></p>
-    <button class="btn btn-go" id="err-retry" type="button">Take a new picture</button>
+    <button class="btn btn-go" id="err-retry" type="button">Try again</button>
     <p class="small">Still stuck? Call or text Matt.</p>
   </section>
 
@@ -193,7 +200,7 @@ function shrink(file) {
   });
 }
 
-$("cam").addEventListener("change", async (e) => {
+async function handlePhoto(e) {
   const file = e.target.files[0];
   e.target.value = "";
   if (!file) return;
@@ -212,7 +219,9 @@ $("cam").addEventListener("change", async (e) => {
     }
     show("s-review");
   } catch (err) { if (err) fail(err.message); }
-});
+}
+$("cam").addEventListener("change", handlePhoto);
+$("lib").addEventListener("change", handlePhoto);
 
 $("post").addEventListener("click", async () => {
   show("s-posting");
@@ -221,8 +230,8 @@ $("post").addEventListener("click", async () => {
 });
 
 const restart = () => show("s-home");
-$("retake").addEventListener("click", () => $("cam").click());
-$("err-retry").addEventListener("click", () => { show("s-home"); $("cam").click(); });
+$("retake").addEventListener("click", () => show("s-home"));
+$("err-retry").addEventListener("click", () => show("s-home"));
 $("again").addEventListener("click", restart);
 $("forget").addEventListener("click", () => { store.set("pin", null); show("s-pin"); });
 $("pin-save").addEventListener("click", () => {

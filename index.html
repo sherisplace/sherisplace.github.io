@@ -24,6 +24,12 @@
   "telephone": "+1-802-885-4240",
   "servesCuisine": ["American", "Tex-Mex"],
   "foundingDate": "2010",
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Wednesday", "Thursday", "Friday", "Saturday"],
+    "opens": "17:00",
+    "closes": "20:00"
+  }],
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "30 Main St",
@@ -226,7 +232,11 @@
     margin: 18px 0 2px; padding-top: 14px; border-top: 2px dashed var(--line);
     font: 800 1.1rem "Fraunces", Georgia, serif; color: var(--brick-dark); break-after: avoid; column-span: all;
   }
-  .cat-note { margin: 12px 0 0; padding: 12px 14px; border-radius: 12px; background: #fdebd0; color: var(--brick-dark); font-weight: 700; font-size: .92rem; }
+  .item .extra { color: var(--brick-dark); font-weight: 800; font-size: .92rem; margin-top: 2px; }
+  .cat-note { margin: 10px 0 0; padding: 10px 14px; border-radius: 12px; background: #fdebd0; color: var(--brick-dark); font-weight: 600; font-size: .92rem; }
+  .cat-note.bold { font-weight: 800; }
+  .cat-note + .cat-note { margin-top: 6px; }
+  .cat-disclaimer { margin: 10px 0 0; color: var(--muted); font-size: .8rem; line-height: 1.4; }
 
   /* ---------- About ---------- */
   .about { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -508,7 +518,7 @@
         <button class="pager-btn" id="nextBtn" type="button"><span id="nextLbl"></span><span aria-hidden="true">&rarr;</span></button>
       </div>
 
-      <p class="menu-note" style="margin-top:22px">Menu items may change. Have an allergy? Just let your server know — we're happy to help. Consuming raw or undercooked meats, poultry, seafood, shellfish or eggs may increase your risk of foodborne illness, especially if you have certain medical conditions.</p>
+      <p class="menu-note" style="margin-top:22px">Menu items may change. Have an allergy? Just let your server know — we're happy to help.</p>
       <div style="margin-top:16px"><a class="btn btn-brick" href="tel:+18028854240"><svg><use href="#i-phone"/></svg>Call to order takeout</a></div>
     </div>
   </section>
@@ -644,7 +654,7 @@
     <label class="hp" aria-hidden="true">Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
     <button class="btn btn-brick" type="submit" id="signupSubmit">Sign me up</button>
     <p class="form-error" id="signupError" hidden></p>
-    <p class="form-note">We'll only email you about Sheri's. Unsubscribe anytime.</p>
+    <p class="form-note" id="signupNote">We'll only email you about Sheri's. Unsubscribe anytime.</p>
   </form>
   <div class="done" id="signupDone" hidden>
     <div class="check"><svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
@@ -679,17 +689,15 @@
 <script>
 /* =====================================================================
    EDIT HOURS HERE. 24-hour times. Use null for closed days.
-   TODO: confirm real hours with Sheri — these are placeholders
-   (Google only shows "Opens 5 PM").
    ===================================================================== */
 const HOURS = {
-  Sunday:    ["17:00", "21:00"],
-  Monday:    ["17:00", "21:00"],
-  Tuesday:   ["17:00", "21:00"],
-  Wednesday: ["17:00", "21:00"],
-  Thursday:  ["17:00", "21:00"],
-  Friday:    ["17:00", "22:00"],
-  Saturday:  ["17:00", "22:00"],
+  Sunday:    null,
+  Monday:    null,
+  Tuesday:   null,
+  Wednesday: ["17:00", "20:00"],
+  Thursday:  ["17:00", "20:00"],
+  Friday:    ["17:00", "20:00"],
+  Saturday:  ["17:00", "20:00"],
 };
 
 /* =====================================================================
@@ -701,6 +709,27 @@ const HOURS = {
    ===================================================================== */
 const MAILERLITE_URL = "https://assets.mailerlite.com/jsonp/2694074/forms/200705264917153664/subscribe";
 const RSVP_EVENT_FIELD = "";
+
+/* =====================================================================
+   GIVEAWAY / RAFFLE / PROMO for menu QR scans — no reprinting needed.
+   Between "start" and "end" (YYYY-MM-DD, both days included), anyone who
+   scans a menu or table QR code gets the "enter to win" pop-up first, then
+   the normal welcome. After "end" it switches back on its own.
+   To turn it off early, set end to yesterday. Leave start "" when none is planned.
+   Preview anytime (even outside the dates): https://sherisplacevt.com/?qr=menu&promo=preview
+   formUrl: optional — a separate MailerLite form for entries, so they land
+   in their own group. Leave "" to use the main email list form.
+   ===================================================================== */
+const PROMO = {
+  start: "",
+  end: "",
+  title: "Enter to win a $50 Sheri's gift card",
+  details: "Leave your name and email for a chance to win.",
+  drawing: "We'll draw a winner and email them on Saturday, November 1.",
+  button: "Enter to win",
+  finePrint: "One entry per person. No purchase necessary. Entering adds you to Sheri's email list; unsubscribe anytime.",
+  formUrl: "",
+};
 
 /* =====================================================================
    UPCOMING EVENTS — add new ones here. Dates are YYYY-MM-DD.
@@ -729,75 +758,299 @@ const SPECIALS = [
 ];
 
 /* =====================================================================
-   EDIT MENU HERE. (From the printed menu, October 2026. No prices on the site.)
-   n = name, d = description (optional).  "note" prints under a section.
+   THE MENU comes from menu/menu.json (word for word from the printed menu).
+   Don't edit the block below by hand — edit menu/menu.json, then run:
+       python3 menu/build.py
+   That rewrites this block AND rebuilds the print PDFs, so they always match.
+   Prices stay in the JSON for the PDF; the website never shows them.
    ===================================================================== */
-const SIDES_SWAP = "Swap in sweet potato fries or onion rings.";
+/* MENU:START */
+const PRINTED_MENU = [
+ {
+  "name": "Appetizers",
+  "items": [
+   {
+    "n": "Soup of the Day"
+   },
+   {
+    "n": "Hand Cut Fries"
+   },
+   {
+    "n": "Shoestring Fries"
+   },
+   {
+    "n": "Sweet Potato Fries"
+   },
+   {
+    "n": "Fried Pickles",
+    "d": "Served with ranch"
+   },
+   {
+    "n": "Basket of Onion Rings"
+   },
+   {
+    "n": "Mozzarella Sticks",
+    "d": "Hand cut and battered, served with our homemade marinara sauce"
+   },
+   {
+    "n": "Deep Fried Mushroom Caps",
+    "d": "Served with ranch"
+   },
+   {
+    "n": "Cheesy Garlic Bread",
+    "d": "Served with our homemade marinara sauce"
+   },
+   {
+    "n": "Big & Loaded Nachos",
+    "d": "A mountain of nachos topped with cheese, seasoned ground beef, rice, beans, lettuce, pico de gallo, salsa and sour cream"
+   },
+   {
+    "n": "Chicken Wings",
+    "d": "8 jumbo wings served with choice of ranch or blue cheese",
+    "x": [
+     {
+      "t": "Buffalo · BBQ · General Tso · Teriyaki Garlic"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Salads",
+  "items": [
+   {
+    "n": "Crispy BBQ Salad",
+    "d": "Crispy chicken rolled in BBQ sauce, on a bed of fresh romaine lettuce, cheddar cheese, tomato, onion, cucumber topped with bacon and ranch dressing"
+   },
+   {
+    "n": "Buffalo Chicken Salad",
+    "d": "Grilled chicken breast, tossed in buffalo sauce on a bed of fresh romaine lettuce, shredded cheddar cheese, tomato, onion and cucumber"
+   },
+   {
+    "n": "Taco Salad",
+    "d": "Romaine lettuce, cheese, rice, black beans and pico de gallo",
+    "x": [
+     {
+      "t": "Your choice of chicken, ground beef or veggie"
+     }
+    ]
+   },
+   {
+    "n": "Caesar Salad",
+    "d": "Romaine lettuce, freshly grated parmesan cheese and croutons"
+   },
+   {
+    "n": "Garden Salad",
+    "d": "Romaine lettuce, tomato, cucumber, onion and carrots"
+   },
+   {
+    "n": "Half Garden or Half Caesar Salad",
+    "x": [
+     {
+      "t": "Add Chicken"
+     }
+    ]
+   }
+  ],
+  "notes": [
+   {
+    "t": "Ranch · Blue Cheese · Honey Mustard · Italian · Balsamic Vinaigrette",
+    "bold": true
+   }
+  ]
+ },
+ {
+  "name": "Burgers",
+  "items": [
+   {
+    "n": "Classic"
+   },
+   {
+    "n": "Classic Cheese",
+    "d": "Your choice of American, Swiss or cheddar cheese"
+   },
+   {
+    "n": "Philly Cheeseburger Sub",
+    "d": "Ground beef sautéed with onions, peppers and American cheese"
+   },
+   {
+    "n": "Texan",
+    "d": "Melted cheddar, bacon and BBQ sauce"
+   },
+   {
+    "n": "802",
+    "d": "Topped with cheddar cheese and maple caramelized bacon"
+   },
+   {
+    "n": "Mushroom Swiss",
+    "d": "Topped with sautéed mushrooms and Swiss cheese"
+   },
+   {
+    "n": "Genius",
+    "d": "Topped with cheddar cheese, sweet chili sauce and jalapeños"
+   },
+   {
+    "n": "Au Jus",
+    "d": "Topped with sautéed onions, Swiss cheese and au jus for dipping"
+   },
+   {
+    "n": "Veggie",
+    "d": "Make any of our signature burgers with a veggie patty"
+   }
+  ],
+  "notes": [
+   {
+    "t": "All burgers are served with our hand cut fries, lettuce, tomato and onion"
+   },
+   {
+    "t": "Substitute sweet potato fries or onion rings",
+    "bold": true
+   }
+  ],
+  "disclaimer": "Consuming raw or under cooked meats, poultry, seafood, shellfish or eggs may increase your risk of food borne illness, especially if you have certain medical conditions."
+ },
+ {
+  "name": "Pub Favorites",
+  "items": [
+   {
+    "n": "Chicken Finger Basket",
+    "d": "Served with a side of your favorite dipping sauce",
+    "x": [
+     {
+      "t": "Additional dipping sauce"
+     }
+    ]
+   },
+   {
+    "n": "Southwest Crispy Chicken Sandwich",
+    "d": "Topped with Swiss cheese, pickles and southwest sauce"
+   },
+   {
+    "n": "Crispy Chicken Deluxe Sandwich",
+    "d": "Swiss cheese, bacon, lettuce, tomato and onion"
+   },
+   {
+    "n": "General Tso Crispy Chicken Sandwich",
+    "d": "Topped with General Tso sauce and sautéed onions"
+   },
+   {
+    "n": "Crispy Honey Mustard Chicken Wrap",
+    "d": "Cheddar cheese, lettuce, tomato, onion and honey mustard"
+   },
+   {
+    "n": "Grilled Chicken Caesar Wrap",
+    "d": "Romaine lettuce and Caesar dressing"
+   },
+   {
+    "n": "Crispy Chicken Bacon Cheddar Wrap",
+    "d": "With tomato, lettuce and mayo"
+   },
+   {
+    "n": "BLT Wrap",
+    "d": "Bacon, lettuce, tomato and mayo"
+   }
+  ],
+  "notes": [
+   {
+    "t": "All pub favorites served with our hand cut fries"
+   },
+   {
+    "t": "Substitute sweet potato fries or onion rings",
+    "bold": true
+   }
+  ]
+ },
+ {
+  "name": "South of the Border",
+  "items": [
+   {
+    "n": "Chicken, Beef or Veggie Burrito",
+    "d": "Stuffed with rice, black beans, cheese, lettuce and pico de gallo"
+   },
+   {
+    "n": "BBQ Quesadilla",
+    "d": "BBQ chicken, bacon and ranch"
+   },
+   {
+    "n": "Mexi Quesadilla",
+    "d": "Seasoned ground beef, cheddar cheese, lettuce and pico de gallo"
+   },
+   {
+    "n": "Buffalo Chicken Quesadilla"
+   },
+   {
+    "n": "Chicken and Veggie",
+    "d": "Grilled chicken, sautéed onions and peppers"
+   },
+   {
+    "n": "Veggie Quesadilla",
+    "d": "Sautéed onion, peppers, mushrooms and tomato"
+   },
+   {
+    "n": "Cheese Quesadilla"
+   },
+   {
+    "n": "Sweet Chili Chicken Tacos",
+    "d": "3 soft shell tortillas, cheddar cheese, grilled chicken topped with Sheri's famous coleslaw and sweet chili sauce"
+   },
+   {
+    "n": "Ground Beef or Chicken Tacos",
+    "d": "3 soft shell tortillas, cheddar cheese, lettuce and pico de gallo"
+   },
+   {
+    "h": "To Go Salsa and Chips"
+   },
+   {
+    "n": "Small Salsa",
+    "d": "8 oz"
+   },
+   {
+    "n": "Large Salsa",
+    "d": "16 oz"
+   }
+  ],
+  "notes": [
+   {
+    "t": "Add a bag of tortilla chips",
+    "bold": true
+   }
+  ]
+ },
+ {
+  "name": "Beverages",
+  "items": [
+   {
+    "n": "Soft Drinks",
+    "x": [
+     {
+      "t": "Pepsi · Diet Pepsi · Root Beer · Ginger Ale · Seltzer · Tonic"
+     },
+     {
+      "t": "Lemonade · Freshly Brewed Iced Tea"
+     },
+     {
+      "t": "Shirley Temple · Roy Rogers · Arnold Palmer"
+     },
+     {
+      "t": "White Milk · Chocolate Milk · Hot Chocolate · Hot Tea · Coffee"
+     }
+    ]
+   },
+   {
+    "n": "Flavored Lemonade or Iced Tea",
+    "x": [
+     {
+      "t": "Strawberry, Raspberry or Mango"
+     }
+    ]
+   }
+  ]
+ }
+];
+/* MENU:END */
 const MENU = [
   { name: "Today's Specials", special: true, d: "These change often — check back to see what's new.", items: SPECIALS },
-  { name: "Appetizers", items: [
-    { n: "Soup of the Day" },
-    { n: "Hand Cut Fries" },
-    { n: "Shoestring Fries" },
-    { n: "Sweet Potato Fries" },
-    { n: "Fried Pickles", d: "Served with ranch" },
-    { n: "Basket of Onion Rings" },
-    { n: "Mozzarella Sticks", d: "Hand cut and battered, served with our homemade marinara sauce" },
-    { n: "Deep Fried Mushroom Caps", d: "Served with ranch" },
-    { n: "Cheesy Garlic Bread", d: "Served with our homemade marinara sauce" },
-    { n: "Big & Loaded Nachos", d: "A mountain of nachos topped with cheese, seasoned ground beef, rice, beans, lettuce, pico de gallo, salsa and sour cream" },
-    { n: "Chicken Wings", d: "8 jumbo wings with your choice of ranch or blue cheese. Buffalo, BBQ, General Tso or Teriyaki Garlic" },
-  ]},
-  { name: "Salads", items: [
-    { n: "Crispy BBQ Salad", d: "Crispy chicken rolled in BBQ sauce on a bed of fresh romaine with cheddar, tomato, onion and cucumber, topped with bacon and ranch dressing" },
-    { n: "Buffalo Chicken Salad", d: "Grilled chicken breast tossed in buffalo sauce on a bed of fresh romaine with shredded cheddar, tomato, onion and cucumber" },
-    { n: "Taco Salad", d: "Romaine, cheese, rice, black beans and pico de gallo. Your choice of chicken, ground beef or veggie" },
-    { n: "Caesar Salad", d: "Romaine, freshly grated parmesan and croutons" },
-    { n: "Garden Salad", d: "Romaine, tomato, cucumber, onion and carrots" },
-    { n: "Half Garden or Half Caesar Salad" },
-  ], note: "Add chicken to any salad. Dressings: Ranch, Blue Cheese, Honey Mustard, Italian, Balsamic Vinaigrette." },
-  { name: "Burgers", items: [
-    { n: "Classic" },
-    { n: "Classic Cheese", d: "Your choice of American, Swiss or cheddar" },
-    { n: "Philly Cheeseburger Sub", d: "Ground beef sautéed with onions, peppers and American cheese" },
-    { n: "Texan", d: "Melted cheddar, bacon and BBQ sauce" },
-    { n: "802", d: "Cheddar and maple caramelized bacon" },
-    { n: "Mushroom Swiss", d: "Sautéed mushrooms and Swiss cheese" },
-    { n: "Genius", d: "Cheddar, sweet chili sauce and jalapeños" },
-    { n: "Au Jus", d: "Sautéed onions, Swiss and au jus for dipping" },
-    { n: "Veggie", d: "Make any of our signature burgers with a veggie patty" },
-  ], note: "All burgers come with our hand cut fries, lettuce, tomato and onion. " + SIDES_SWAP },
-  { name: "Pub Favorites", items: [
-    { n: "Chicken Finger Basket", d: "Served with your favorite dipping sauce" },
-    { n: "Southwest Crispy Chicken Sandwich", d: "Swiss cheese, pickles and southwest sauce" },
-    { n: "Crispy Chicken Deluxe Sandwich", d: "Swiss cheese, bacon, lettuce, tomato and onion" },
-    { n: "General Tso Crispy Chicken Sandwich", d: "General Tso sauce and sautéed onions" },
-    { n: "Crispy Honey Mustard Chicken Wrap", d: "Cheddar, lettuce, tomato, onion and honey mustard" },
-    { n: "Grilled Chicken Caesar Wrap", d: "Romaine and Caesar dressing" },
-    { n: "Crispy Chicken Bacon Cheddar Wrap", d: "Tomato, lettuce and mayo" },
-    { n: "BLT Wrap", d: "Bacon, lettuce, tomato and mayo" },
-  ], note: "All pub favorites come with our hand cut fries. " + SIDES_SWAP },
-  { name: "South of the Border", items: [
-    { n: "Chicken, Beef or Veggie Burrito", d: "Stuffed with rice, black beans, cheese, lettuce and pico de gallo" },
-    { n: "BBQ Quesadilla", d: "BBQ chicken, bacon and ranch" },
-    { n: "Mexi Quesadilla", d: "Seasoned ground beef, cheddar, lettuce and pico de gallo" },
-    { n: "Buffalo Chicken Quesadilla" },
-    { n: "Chicken & Veggie", d: "Grilled chicken, sautéed onions and peppers" },
-    { n: "Veggie Quesadilla", d: "Sautéed onion, peppers, mushrooms and tomato" },
-    { n: "Cheese Quesadilla" },
-    { n: "Sweet Chili Chicken Tacos", d: "3 soft shell tortillas, cheddar and grilled chicken topped with Sheri's famous coleslaw and sweet chili sauce" },
-    { n: "Ground Beef or Chicken Tacos", d: "3 soft shell tortillas, cheddar, lettuce and pico de gallo" },
-    { h: "Salsa & Chips To Go" },
-    { n: "Small Salsa", d: "8 oz" },
-    { n: "Large Salsa", d: "16 oz. Add a bag of tortilla chips" },
-  ]},
-  { name: "Beverages", items: [
-    { n: "Soft Drinks", d: "Pepsi, Diet Pepsi, Root Beer, Ginger Ale, Seltzer, Tonic" },
-    { n: "Lemonade & Iced Tea", d: "Lemonade, freshly brewed iced tea" },
-    { n: "Flavored Lemonade or Iced Tea", d: "Strawberry, raspberry or mango" },
-    { n: "Mocktails", d: "Shirley Temple, Roy Rogers, Arnold Palmer" },
-    { n: "Milk & Hot Drinks", d: "White milk, chocolate milk, hot chocolate, hot tea, coffee" },
-  ]},
+  ...PRINTED_MENU,
 ];
 
 /* ---------------- Rendering (no edits needed below) ---------------- */
@@ -817,8 +1070,10 @@ $("#menuList").innerHTML = MENU.map((c) => `
       <div class="item">
         <h4>${esc(it.n)}</h4>
         ${it.d ? `<p>${esc(it.d)}</p>` : ""}
+        ${(it.x || []).map((x) => `<p class="extra">${esc(x.t)}</p>`).join("")}
       </div>`).join("")}</div>
-    ${c.note ? `<p class="cat-note">${esc(c.note)}</p>` : ""}
+    ${(c.notes || []).map((n) => `<p class="cat-note${n.bold ? " bold" : ""}">${esc(n.t)}</p>`).join("")}
+    ${c.disclaimer ? `<p class="cat-disclaimer">${esc(c.disclaimer)}</p>` : ""}
   </div></div>`).join("");
 
 // Menu carousel
@@ -927,7 +1182,14 @@ const rows = DAYS.map((d) => `
 document.querySelectorAll(".js-hours").forEach((tb) => tb.innerHTML = rows);
 
 const h = HOURS[today];
-$("#statusText").textContent = h ? `Open today ${fmt(h[0])} – ${fmt(h[1])}` : "Closed today";
+// On closed days, say when we're open next (e.g. "Closed today · Open Wednesday 5 PM")
+const nextOpen = () => {
+  for (let i = 1; i <= 7; i++) {
+    const d = DAYS[(vt.getDay() + i) % 7];
+    if (HOURS[d]) return `${i === 1 ? "tomorrow" : d} ${fmt(HOURS[d][0])}`;
+  }
+};
+$("#statusText").textContent = h ? `Open today ${fmt(h[0])} – ${fmt(h[1])}` : `Closed today · Open ${nextOpen()}`;
 
 // Pop-ups (hours + events) slide up from the bottom
 function closeSheet(sheet) {
@@ -972,13 +1234,18 @@ if (upcoming.length) {
 // Sign-up pop-up: RSVP for one event, or join the general email list
 const signup = { sheet: $("#signupSheet"), form: $("#signupForm"), event: null };
 const longDate = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
-function openSignup(event) {
+const submitLabel = () => signup.promo ? PROMO.button : signup.event ? "Count me in" : "Sign me up";
+function openSignup(event, promo = false) {
   signup.event = event || null;
-  $("#signupTitle").textContent = event ? `RSVP: ${event.title}` : "Join our email list";
-  $("#signupSub").textContent = event
+  signup.promo = promo;
+  $("#signupTitle").textContent = promo ? PROMO.title : event ? `RSVP: ${event.title}` : "Join our email list";
+  $("#signupSub").textContent = promo
+    ? `${PROMO.details}${PROMO.end ? ` Enter by ${longDate(PROMO.end)}.` : ""}`
+    : event
     ? `${longDate(event.date)}. Leave your name and email and we'll keep you posted on this event and other happenings at Sheri's.`
     : "Be the first to hear about events, specials and news from Sheri's.";
-  $("#signupSubmit").textContent = event ? "Count me in" : "Sign me up";
+  $("#signupNote").textContent = promo ? PROMO.finePrint : "We'll only email you about Sheri's. Unsubscribe anytime.";
+  $("#signupSubmit").textContent = submitLabel();
   signup.form.hidden = false; $("#signupDone").hidden = true; $("#signupError").hidden = true;
   signup.sheet.showModal();
 }
@@ -1003,7 +1270,8 @@ signup.form.addEventListener("submit", async (e) => {
     // Same request MailerLite's own embed script sends (GET + ajax=1)
     const q = new URLSearchParams({ "fields[name]": data.name, "fields[email]": data.email, "ml-submit": "1", anticsrf: "true", ajax: "1" });
     if (signup.event && RSVP_EVENT_FIELD) q.set(`fields[${RSVP_EVENT_FIELD}]`, `${data.event} (${data.eventDate})`);
-    const res = await fetch(`${MAILERLITE_URL}?${q}`, { headers: { Accept: "application/json" } });
+    const url = (signup.promo && PROMO.formUrl) || MAILERLITE_URL;
+    const res = await fetch(`${url}?${q}`, { headers: { Accept: "application/json" } });
     const out = await res.json().catch(() => ({}));
     if (!out.success && !out.fieldsToConfirm?.length) {
       console.warn("MailerLite response:", res.status, out);
@@ -1011,15 +1279,17 @@ signup.form.addEventListener("submit", async (e) => {
       throw new Error(emailErr ? "Please double-check your email address." : "");
     }
     const first = data.name.split(" ")[0];
-    $("#doneTitle").textContent = signup.event ? `See you there, ${first}!` : `You're on the list, ${first}!`;
-    $("#doneText").textContent = signup.event
+    $("#doneTitle").textContent = signup.promo ? `You're entered, ${first}!` : signup.event ? `See you there, ${first}!` : `You're on the list, ${first}!`;
+    $("#doneText").textContent = signup.promo
+      ? `Good luck! ${PROMO.drawing}`
+      : signup.event
       ? `You're down for ${signup.event.title} on ${longDate(signup.event.date)}. We'll email you if anything changes.`
       : "Keep an eye on your inbox for news from Sheri's.";
     f.reset(); f.hidden = true; $("#signupDone").hidden = false;
   } catch (x) {
     err.textContent = x.message || "Something went wrong. Please try again, or give us a call."; err.hidden = false;
   } finally {
-    btn.disabled = false; btn.textContent = signup.event ? "Count me in" : "Sign me up";
+    btn.disabled = false; btn.textContent = submitLabel();
   }
 });
 
@@ -1030,8 +1300,9 @@ signup.form.addEventListener("submit", async (e) => {
    ===================================================================== */
 const params = new URLSearchParams(location.search);
 if (params.has("qr")) {
+  const promoOn = params.get("promo") === "preview" || (PROMO.start && PROMO.end && PROMO.start <= todayISO && todayISO <= PROMO.end);
   // tidy the address bar so a shared or bookmarked link doesn't re-trigger it
-  params.delete("qr");
+  params.delete("qr"); params.delete("promo");
   history.replaceState(null, "", location.pathname + (params.toString() ? `?${params}` : "") + location.hash);
   let seen = false;
   try { seen = sessionStorage.getItem("qrWelcome") === "1"; sessionStorage.setItem("qrWelcome", "1"); } catch {}
@@ -1047,7 +1318,13 @@ if (params.has("qr")) {
     $("#wEvents").hidden = false;
     $("#wEvents").addEventListener("click", () => then(() => $("#eventsSheet").showModal()));
   }
-  if (!seen) setTimeout(() => welcome.showModal(), 1200); // after the logo writes itself in
+  if (!seen && promoOn) {
+    // giveaway running: "enter to win" first, then the normal welcome once they close it
+    setTimeout(() => openSignup(null, true), 1200);
+    signup.sheet.addEventListener("close", () => { signup.promo = false; welcome.showModal(); }, { once: true });
+  } else if (!seen) {
+    setTimeout(() => welcome.showModal(), 1200); // after the logo writes itself in
+  }
 }
 
 $("#yr").textContent = new Date().getFullYear();

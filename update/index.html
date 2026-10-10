@@ -17,7 +17,7 @@
 <style>
   :root {
     --brick: #7A1C14; --hearth: #4A0F0A; --gold: #F4B324; --cream: #FBF4E8; --paper: #FFFAF1;
-    --ink: #2B1A14; --walnut: #6F5A4E; --linen: #EAD9BF; --green: #2F7D3A;
+    --ink: #2B1A14; --walnut: #6F5A4E; --linen: #EAD9BF; --green: #2F7D3A; --red: #B3261E;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; }
@@ -42,14 +42,19 @@
   .big svg { width: 64px; height: 64px; }
   .big:active { transform: translateY(3px); box-shadow: 0 3px 0 #c98a0a; }
   .btn {
-    display: flex; align-items: center; justify-content: center; width: 100%; min-height: 66px; border-radius: 18px;
-    border: 0; cursor: pointer; font: 800 1.3rem "Nunito", sans-serif; text-decoration: none; margin-top: 14px;
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 66px; border-radius: 18px;
+    border: 0; cursor: pointer; font: 800 1.3rem "Nunito", sans-serif; text-decoration: none; margin-top: 14px; text-align: center;
   }
+  .btn svg { width: 28px; height: 28px; flex: none; }
   .btn-go { background: var(--green); color: #fff; box-shadow: 0 5px 0 #1f5a27; }
+  .btn-gold { background: var(--gold); color: var(--hearth); box-shadow: 0 5px 0 #c98a0a; }
+  .btn-brick { background: var(--brick); color: #fff; box-shadow: 0 5px 0 var(--hearth); }
+  .btn-red { background: var(--red); color: #fff; box-shadow: 0 5px 0 #7d1a15; }
   .btn-plain { background: var(--paper); color: var(--brick); border: 2px solid var(--linen); }
-  .btn:disabled { opacity: .6; }
-  .pick { margin-top: 18px; gap: 10px; cursor: pointer; }
-  .pick svg { width: 28px; height: 28px; flex: none; }
+  .pick { margin-top: 18px; cursor: pointer; }
+  .events-btn { margin-top: 34px; min-height: 84px; font-size: 1.45rem; }
+  .divider { border: 0; border-top: 2px dashed var(--linen); margin: 34px 0 0; }
+  .back { background: none; border: 0; color: var(--brick); font: 800 1.15rem "Nunito", sans-serif; padding: 6px 0 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
   .photo { width: 100%; border-radius: 16px; display: block; margin-bottom: 18px; max-height: 260px; object-fit: cover; }
   .card { background: var(--paper); border: 2px solid var(--gold); border-radius: 20px; padding: 6px 20px; }
@@ -59,9 +64,33 @@
   .card li small { display: block; font-weight: 400; color: var(--walnut); font-size: 1rem; }
   .ask { text-align: center; font-weight: 800; font-size: 1.25rem; margin: 22px 0 0; }
 
+  /* events */
+  .event { background: var(--paper); border: 2px solid var(--linen); border-radius: 20px; padding: 16px; margin-bottom: 16px; }
+  .event.preview { border-color: var(--gold); }
+  .event-top { display: flex; gap: 14px; align-items: flex-start; }
+  .event h2 { font: 800 1.3rem/1.2 "Fraunces", Georgia, serif; color: var(--hearth); margin: 2px 0 4px; }
+  .event p { margin: 0; color: var(--walnut); font-size: 1.05rem; }
+  .event .when { color: var(--ink); font-weight: 800; }
+  .tile { flex: none; width: 64px; border-radius: 12px; overflow: hidden; text-align: center; background: #fff; border: 1px solid var(--linen); line-height: 1.1; }
+  .tile b { display: block; background: var(--brick); color: #fff; font-size: .8rem; letter-spacing: .06em; padding: 4px 0; }
+  .tile strong { display: block; font: 800 1.7rem "Fraunces", Georgia, serif; color: var(--hearth); padding-top: 3px; }
+  .tile span { display: block; font-size: .78rem; font-weight: 800; color: var(--walnut); padding-bottom: 5px; }
+  .event-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .event-actions .btn { margin: 0; min-height: 56px; font-size: 1.15rem; }
+  .btn-remove { background: #fff; color: var(--red); border: 2px solid #F0C4BC; }
+  .empty { text-align: center; color: var(--walnut); font-size: 1.15rem; padding: 18px 0 6px; }
+
+  label.field { display: block; font-weight: 800; font-size: 1.25rem; margin: 18px 0 8px; }
+  .input {
+    width: 100%; font: 400 1.25rem "Nunito", sans-serif; padding: 16px; border-radius: 16px;
+    border: 3px solid var(--linen); background: #fff; color: var(--ink); min-height: 64px;
+  }
+  textarea.input { min-height: 150px; resize: vertical; line-height: 1.4; }
+  .input:focus { outline: none; border-color: var(--gold); }
+  .hint { color: var(--walnut); font-size: 1rem; margin: 8px 0 0; }
+
   .spinner { width: 70px; height: 70px; margin: 30px auto 18px; border-radius: 50%; border: 8px solid var(--linen); border-top-color: var(--brick); animation: spin 1s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .center { text-align: center; }
   .check { width: 110px; height: 110px; border-radius: 50%; margin: 10px auto 18px; display: grid; place-items: center; background: var(--green); color: #fff; }
   .check svg { width: 64px; height: 64px; }
   .oops { background: #FBE6E2; border: 2px solid #F0C4BC; border-radius: 18px; padding: 18px; text-align: center; font-weight: 700; margin-bottom: 8px; }
@@ -78,6 +107,14 @@
 <body>
 <header><img src="../images/logo.webp" alt="Sheri's"></header>
 
+<!-- shared icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cal" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-2 8h14v10H5V10z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="currentColor" d="M18.3 5.7 16.9 4.3 12 9.2 7.1 4.3 5.7 5.7 10.6 10.6 5.7 15.5l1.4 1.4 4.9-4.9 4.9 4.9 1.4-1.4-4.9-4.9z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></symbol>
+</svg>
+
 <main>
   <!-- PIN (first time only) -->
   <section id="s-pin" hidden>
@@ -88,7 +125,7 @@
     <button class="btn btn-go" id="pin-save" type="button">Continue</button>
   </section>
 
-  <!-- 1. take the picture -->
+  <!-- HOME: specials + events -->
   <section id="s-home" hidden>
     <h1>Today's Specials</h1>
     <p class="lead">Take a picture of the specials board,<br>or pick one you already took.</p>
@@ -102,9 +139,12 @@
       Choose a photo instead
     </label>
     <input id="lib" type="file" accept="image/*" hidden>
+
+    <hr class="divider">
+    <button class="btn btn-brick events-btn" id="go-events" type="button"><svg><use href="#i-cal"/></svg>Events</button>
   </section>
 
-  <!-- 2. reading -->
+  <!-- SPECIALS: reading -->
   <section id="s-reading" hidden>
     <img class="photo" id="thumb" alt="">
     <div class="spinner" aria-hidden="true"></div>
@@ -112,7 +152,7 @@
     <p class="lead">This takes about 20 seconds.</p>
   </section>
 
-  <!-- 3. check it -->
+  <!-- SPECIALS: check it -->
   <section id="s-review" hidden>
     <h1>Is this right?</h1>
     <div class="card"><ol id="list"></ol></div>
@@ -121,19 +161,60 @@
     <button class="btn btn-plain" id="retake" type="button">No, try a different picture</button>
   </section>
 
-  <!-- 4. posting -->
-  <section id="s-posting" hidden>
-    <div class="spinner" aria-hidden="true"></div>
-    <h1>Putting it on the website…</h1>
+  <!-- EVENTS: list -->
+  <section id="s-events" hidden>
+    <button class="back js-home" type="button"><svg width="26" height="26"><use href="#i-back"/></svg>Back</button>
+    <h1>Events</h1>
+    <div id="ev-loading"><div class="spinner" aria-hidden="true"></div><p class="lead">Getting your events…</p></div>
+    <div id="ev-list"></div>
+    <button class="btn btn-gold" id="ev-add" type="button" hidden><svg><use href="#i-plus"/></svg>Add an event</button>
   </section>
 
-  <!-- 5. done -->
+  <!-- EVENTS: add / change -->
+  <section id="s-ev-form" hidden>
+    <button class="back" id="form-back" type="button"><svg width="26" height="26"><use href="#i-back"/></svg>Back</button>
+    <h1 id="form-title">Add an event</h1>
+    <label class="field" for="ev-date">What day?</label>
+    <input class="input" id="ev-date" type="date">
+    <label class="field" for="ev-text">What's happening?</label>
+    <textarea class="input" id="ev-text" placeholder="For example: Karaoke with DJ Shirl, 7 to 10 at night"></textarea>
+    <p class="hint">Write it however you like. Include the time if there is one.</p>
+    <button class="btn btn-go" id="ev-next" type="button">Next</button>
+  </section>
+
+  <!-- EVENTS: check it -->
+  <section id="s-ev-review" hidden>
+    <h1>Is this right?</h1>
+    <div id="ev-preview"></div>
+    <p class="ask">If it looks right, tap the green button.</p>
+    <button class="btn btn-go" id="ev-save" type="button">Yes, put it on the website</button>
+    <button class="btn btn-plain" id="ev-edit" type="button">No, change it</button>
+  </section>
+
+  <!-- EVENTS: remove? -->
+  <section id="s-ev-remove" hidden>
+    <h1>Remove this event?</h1>
+    <p class="lead">It will come off the website.</p>
+    <div id="rm-preview"></div>
+    <button class="btn btn-red" id="rm-yes" type="button"><svg><use href="#i-x"/></svg>Yes, remove it</button>
+    <button class="btn btn-plain" id="rm-no" type="button">No, keep it</button>
+  </section>
+
+  <!-- working… -->
+  <section id="s-busy" hidden>
+    <div class="spinner" aria-hidden="true"></div>
+    <h1 id="busy-title">Putting it on the website…</h1>
+    <p class="lead" id="busy-text"></p>
+  </section>
+
+  <!-- done -->
   <section id="s-done" hidden>
     <div class="check"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
     <h1>All done!</h1>
-    <p class="lead">The website will show today's specials in about a minute.</p>
-    <a class="btn btn-plain" href="https://sherisplacevt.com/#menu" target="_blank" rel="noopener">See the website</a>
-    <button class="btn btn-plain" id="again" type="button">Start over</button>
+    <p class="lead" id="done-text">The website will show it in about a minute.</p>
+    <button class="btn btn-brick" id="done-events" type="button" hidden>Back to events</button>
+    <button class="btn btn-plain js-home" type="button">Back to the start</button>
+    <a class="btn btn-plain" href="https://sherisplacevt.com/" target="_blank" rel="noopener">See the website</a>
   </section>
 
   <!-- problem -->
@@ -154,24 +235,41 @@
 const API_URL = "https://sheris-specials.sheris.workers.dev";
 
 const $ = (id) => document.getElementById(id);
-const screens = ["s-pin", "s-home", "s-reading", "s-review", "s-posting", "s-done", "s-error"];
+const screens = [...document.querySelectorAll("main > section")].map((s) => s.id);
 const show = (id) => { screens.forEach((s) => $(s).hidden = s !== id); $("footer").hidden = id !== "s-home"; window.scrollTo(0, 0); };
 const store = {
   get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
   set: (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
 };
 const DEMO = new URLSearchParams(location.search).has("demo"); // preview the screens without posting anything
-let items = [];
+let items = [];          // specials read from the photo
+let draft = null;        // event waiting for "Is this right?"
+let editing = null;      // the event being changed (null when adding)
+let removing = null;     // the event waiting for "Remove this event?"
+let retryTo = "s-home";  // where "Try again" goes
 
-function fail(message) { $("err-msg").textContent = message; show("s-error"); }
+function fail(message, back = "s-home") { retryTo = back; $("err-msg").textContent = message; show("s-error"); }
+function busy(title, text = "") { $("busy-title").textContent = title; $("busy-text").textContent = text; show("s-busy"); }
+function done(text, toEvents) { $("done-text").textContent = text; $("done-events").hidden = !toEvents; show("s-done"); }
+const todayVT = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
 
-async function call(path, body) {
-  if (DEMO) {
-    await new Promise((r) => setTimeout(r, path === "/read" ? 1500 : 800));
-    return path === "/read"
-      ? { items: [{ n: "Tomato Cheddar Soup" }, { n: "Lasagna" }, { n: "Fish Tacos" }, { n: "Homemade Apple Pie", d: "Dessert" }] }
-      : { ok: true };
-  }
+// ---------------------------------------------------------------- talking to the Worker
+let demoEvents = [
+  { date: "2026-10-17", title: "Brunch & Book Swap", lines: ["Brunch 10 AM – 2 PM", "Book swap 2 – 4 PM"] },
+  { date: "2026-10-24", title: "Tarot Readings", lines: ["7 – 9 PM"] },
+];
+async function demo(path, body) {
+  await new Promise((r) => setTimeout(r, path === "/read" || path === "/events/draft" ? 1200 : 600));
+  if (path === "/read") return { items: [{ n: "Tomato Cheddar Soup" }, { n: "Lasagna" }, { n: "Homemade Apple Pie", d: "Dessert" }] };
+  if (path === "/events/list") return { events: demoEvents };
+  if (path === "/events/draft") return { event: { date: body.date, title: body.text.split(",")[0].replace(/\b\w/g, (c) => c.toUpperCase()), lines: ["7 – 10 PM"] } };
+  if (path === "/events/save") demoEvents = [...demoEvents.filter((e) => !(body.replace && e.date === body.replace.date && e.title === body.replace.title)), body.event].sort((a, b) => a.date.localeCompare(b.date));
+  if (path === "/events/remove") demoEvents = demoEvents.filter((e) => !(e.date === body.event.date && e.title === body.event.title));
+  return { ok: true };
+}
+
+async function call(path, body = {}) {
+  if (DEMO) return demo(path, body);
   if (!API_URL) throw new Error("This app isn't connected yet. Tell Matt.");
   const res = await fetch(API_URL + path, {
     method: "POST", headers: { "Content-Type": "application/json" },
@@ -183,6 +281,7 @@ async function call(path, body) {
   return out;
 }
 
+// ---------------------------------------------------------------- specials
 // Shrink the phone photo (often 4000px+) so it uploads fast; Claude reads 1600px boards fine.
 function shrink(file) {
   return new Promise((resolve, reject) => {
@@ -222,17 +321,99 @@ async function handlePhoto(e) {
 }
 $("cam").addEventListener("change", handlePhoto);
 $("lib").addEventListener("change", handlePhoto);
-
 $("post").addEventListener("click", async () => {
-  show("s-posting");
-  try { await call("/publish", { items }); show("s-done"); }
+  busy("Putting it on the website…");
+  try { await call("/publish", { items }); done("The website will show today's specials in about a minute.", false); }
   catch (err) { if (err) fail(err.message); }
 });
-
-const restart = () => show("s-home");
 $("retake").addEventListener("click", () => show("s-home"));
-$("err-retry").addEventListener("click", () => show("s-home"));
-$("again").addEventListener("click", restart);
+
+// ---------------------------------------------------------------- events
+function eventCard(ev, actions) {
+  const d = new Date(ev.date + "T12:00:00");
+  const card = document.createElement("div");
+  card.className = "event" + (actions ? "" : " preview");
+  card.innerHTML = `
+    <div class="event-top">
+      <div class="tile"><b></b><strong></strong><span></span></div>
+      <div><h2></h2><p class="when"></p></div>
+    </div>`;
+  card.querySelector(".tile b").textContent = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+  card.querySelector(".tile strong").textContent = d.getDate();
+  card.querySelector(".tile span").textContent = d.toLocaleString("en-US", { weekday: "short" }).toUpperCase();
+  card.querySelector("h2").textContent = ev.title;
+  card.querySelector(".when").textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+  const info = card.querySelector(".event-top > div:last-child");
+  for (const line of ev.lines || []) { const p = document.createElement("p"); p.textContent = line; info.append(p); }
+  if (actions) {
+    const row = document.createElement("div");
+    row.className = "event-actions";
+    row.innerHTML = `<button class="btn btn-plain" type="button">Change</button>
+      <button class="btn btn-remove" type="button"><svg><use href="#i-x"/></svg>Remove</button>`;
+    row.children[0].addEventListener("click", () => openForm(ev));
+    row.children[1].addEventListener("click", () => { removing = ev; $("rm-preview").replaceChildren(eventCard(ev, false)); show("s-ev-remove"); });
+    card.append(row);
+  }
+  return card;
+}
+
+async function openEvents() {
+  show("s-events");
+  $("ev-loading").hidden = false; $("ev-list").replaceChildren(); $("ev-add").hidden = true;
+  try {
+    const { events } = await call("/events/list");
+    $("ev-loading").hidden = true;
+    if (!events.length) {
+      const p = document.createElement("p"); p.className = "empty"; p.textContent = "No events coming up.";
+      $("ev-list").append(p);
+    }
+    for (const ev of events) $("ev-list").append(eventCard(ev, true));
+    $("ev-add").hidden = false;
+  } catch (err) { if (err) fail(err.message, "s-events"); }
+}
+
+function openForm(ev = null) {
+  editing = ev;
+  $("form-title").textContent = ev ? "Change this event" : "Add an event";
+  $("ev-date").min = todayVT();
+  $("ev-date").value = ev ? ev.date : "";
+  $("ev-text").value = ev ? [ev.title, ...(ev.lines || [])].join(", ") : "";
+  show("s-ev-form");
+}
+
+$("go-events").addEventListener("click", openEvents);
+$("ev-add").addEventListener("click", () => openForm(null));
+$("form-back").addEventListener("click", openEvents);
+$("ev-next").addEventListener("click", async () => {
+  const date = $("ev-date").value, text = $("ev-text").value.trim();
+  if (!date) { $("ev-date").focus(); return fail("Please pick the day first.", "s-ev-form"); }
+  if (!text) { return fail("Please type what's happening.", "s-ev-form"); }
+  busy("Writing it up…", "This takes about 10 seconds.");
+  try {
+    ({ event: draft } = await call("/events/draft", { date, text }));
+    $("ev-preview").replaceChildren(eventCard(draft, false));
+    show("s-ev-review");
+  } catch (err) { if (err) fail(err.message, "s-ev-form"); }
+});
+$("ev-edit").addEventListener("click", () => show("s-ev-form"));   // keeps what she typed
+$("ev-save").addEventListener("click", async () => {
+  busy("Putting it on the website…");
+  try {
+    await call("/events/save", { event: draft, replace: editing ? { date: editing.date, title: editing.title } : undefined });
+    done(`"${draft.title}" will show on the website in about a minute.`, true);
+  } catch (err) { if (err) fail(err.message, "s-ev-form"); }
+});
+$("rm-yes").addEventListener("click", async () => {
+  busy("Taking it off the website…");
+  try { await call("/events/remove", { event: removing }); done(`"${removing.title}" will come off the website in about a minute.`, true); }
+  catch (err) { if (err) fail(err.message, "s-events"); }
+});
+$("rm-no").addEventListener("click", openEvents);
+$("done-events").addEventListener("click", openEvents);
+
+// ---------------------------------------------------------------- navigation + PIN
+document.querySelectorAll(".js-home").forEach((b) => b.addEventListener("click", () => show("s-home")));
+$("err-retry").addEventListener("click", () => retryTo === "s-events" ? openEvents() : show(retryTo));
 $("forget").addEventListener("click", () => { store.set("pin", null); show("s-pin"); });
 $("pin-save").addEventListener("click", () => {
   const v = $("pin").value.trim();
